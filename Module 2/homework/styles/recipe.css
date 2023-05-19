@@ -36,6 +36,7 @@ h2 {
 body {
     background-color: #FFFFFF;
     background-image: url("../images/silverware.jpg");
+    background-attachment: fixed;
   }
   
 body, p, a {
@@ -55,4 +56,8 @@ ul {
 blockquote {
     font-style: italic;
     background-color: #FFFFA8;
+}
+
+strong {
+    font-weight: bold;
 }

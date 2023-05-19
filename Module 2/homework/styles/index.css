@@ -1,0 +1,62 @@
+/*
+Dan Kolan
+CPSC 5200 Web Development I
+Project 1: Recipe (HTML & CSS)
+
+In this assignment I implemented the content and style requirements detailed in Project1.pdf
+in which we created a landing page for Grandma's Recipes that links to her pie recipe.
+
+This file, index.css, includes the definition of all the styling for elements included 
+within pages that link to this CSS file.
+
+I implemented the following extra features:
+1. Background is silverware.jpg repeated in both directions
+2. Favicon is set to pie-icon.gif
+3. Pie bullet: all unordered list bullets are pie-bullet.png
+4. Wide headings: there is 0.25em horizontal spacing between letters in headings
+*/
+
+body {
+    background-color: #ffffff;
+    background-image: url("../images/hey_arnold_grandma.png");
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 10%;
+    color: #404040;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+    padding: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+a {
+    color: #404040;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: rgba(255, 243, 109, 10);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: rgba(122, 158, 255, 10);
+    color: #ffffff;
+}
