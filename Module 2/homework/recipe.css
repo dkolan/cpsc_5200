@@ -35,7 +35,7 @@ h2 {
 
 body {
     background-color: #FFFFFF;
-    background-image: url("../images/silverware.jpg");
+    background-image: url("images/silverware.jpg");
     background-attachment: fixed;
   }
   
@@ -50,7 +50,7 @@ a {
 }
 
 ul {
-    list-style-image: url("../images/pie_bullet.png");
+    list-style-image: url("images/pie_bullet.png");
 }
 
 blockquote {

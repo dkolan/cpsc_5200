@@ -18,7 +18,7 @@ I implemented the following extra features:
 
 body {
     background-color: #ffffff;
-    background-image: url("../images/hey_arnold_grandma.png");
+    background-image: url("images/hey_arnold_grandma.png");
     background-position: bottom right;
     background-repeat: no-repeat;
     background-attachment: fixed;
