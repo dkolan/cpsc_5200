@@ -12,21 +12,23 @@
 		<div id="banner-top">
 			<img id="banner-logo" src="banner.png" alt="Rancid Tomatoes" />
 		</div>
-
+	
+		<!-- Get the film info from the query param's corresponding info.txt -->
 		<?php
-			$filmInfoList = getFilmInfo($_GET["film"]);			
-			$filmName = $filmInfoList[0];
-			$filmYear = $filmInfoList[1];
-			$filmScore = $filmInfoList[2];
+			$filmQueryParam = $_GET["film"];
+			$filmInfoList = getFilmInfo($filmQueryParam);			
+			$filmName = trim($filmInfoList[0]);
+			$filmYear = trim($filmInfoList[1]);
+			$filmScore = trim($filmInfoList[2]);
 		?>
-		<h1 class="movie-title"><?= $filmName ?> (<?= $filmYear ?>) </h1>
 
-		<!-- <h1 class="movie-title">TMNT (2007)</h1> -->
+		<h1 class="movie-title"><?= $filmName ?> (<?= $filmYear?>) </h1>
 		
 		<div class="overall-content-container">
 			<div id="overview-container">
 				<div>
-					<img id="overview-img" src="overview.png" alt="general overview" />
+					<!-- Assign image based on filmQueryParam -->
+					<img id="overview-img" src=<?= "$filmQueryParam/overview.png" ?> alt="general overview" />
 				</div>
 				<dl>
 					<dt>STARRING</dt>
@@ -62,8 +64,9 @@
 
 			<div class="score-review-container">
 				<div class="score-container">
-					<img id="rotten-logo" src="rottenbig.png" alt="Rotten" />
-					33%
+					<!-- Assign the score logo depending on whether the score is Rotten (<60) or Fresh (>= 60) -->
+					<img id="rotten-logo" src=<?= ($filmScore < 60) ? "rottenbig.png" : "freshbig.png" ?> alt="Rotten" />
+					<?= $filmScore ?>%
 				</div>
 				
 				<div class="review-column-left">
