@@ -31,29 +31,19 @@
 					<img id="overview-img" src=<?= "$filmQueryParam/overview.png" ?> alt="general overview" />
 				</div>
 
-				<!-- General Overview info -->
+				<!-- General Overview info, build a key:value map of term:definition. -->
 				<?php
 					$generalOverviewInfoMap = buildFilmGeneralOverviewMap($filmQueryParam);
 				?>
 				<dl>
-					<?php
-						foreach ($generalOverviewInfoMap as $infoKey => $infoVal) {
-							$term = $infoKey;
-							$description = "";
-							if (is_array($generalOverviewInfoMap[$infoKey])) {
-								foreach ($generalOverviewInfoMap[$infoKey] as $descValue) {
-									$description = $description.trim($descValue)."<br/>";
-								}
-							} else {
-								$description = $generalOverviewInfoMap[$infoKey];
-							}
-							error_log(print_r($description, TRUE)); 
-					?>
-							<dt><?= $term ?></dt>
-							<dd><?= $description ?></dd>
-					<?php
-						}
-					?>
+				<?php
+					foreach ($generalOverviewInfoMap as $infoKey => $infoVal) {
+				?>
+						<dt><?= $infoKey ?></dt>
+						<dd><?= $generalOverviewInfoMap[$infoKey] ?></dd>
+				<?php
+					}
+				?>
 					<br	/>
 				</dl>
 			</div>
@@ -211,124 +201,135 @@ function getFilmInfo(string $filmName): array {
  * @param  mixed $filmName = name of the film/url film query parame
  * @return array A k:v map of the headers (key) and info (values) in the general overview section
  */
-function buildFilmGeneralOverviewMap(string $filmName): array {
-	$overviewInfoList = file("$filmName/overview.txt");
-	$overviewMap = array();
-	foreach ($overviewInfoList as $info) {
-		$splitInfo = explode(":", $info);
-		$category = $splitInfo[0];
-		switch ($category) {
-			case "STARRING":
-				// Account for films like tmnt with line break delimiter 
-				if (str_contains($splitInfo[1], "<br />")) {
-					$castList = explode("<br />", $splitInfo[1]);
-				} else { // Comma delimited
-					$castList = explode(",", $splitInfo[1]);
-				}
-				$overviewMap["STARRING"] = $castList;
-				break;
-			case "DIRECTOR":
-				$director = explode(",", $splitInfo[1]);
-				$overviewMap["DIRECTOR"] = $director;
-				break;
-			case "PRODUCER":
-				$producer = explode(",", $splitInfo[1]);
-				$category = count($producer) > 1 ? "PRODUCERS" : "PRODUCER";
-				$overviewMap["PRODUCER"] = $producer;
-				break; 
-			case "SCREENWRITER":
-				$screenwriter = explode(",", $splitInfo[1]);
-				$category = count($screenwriter) > 1 ? "SCREENWRITERS" : "SCREENWRITER";
-				$overviewMap["SCREENWRITER"] = $screenwriter;
-				break; 
-			case "RATING":
-				$ratingHeader = "RATING";
-				$ratingsList = array("G", "PG", "PG-13", "R", "NC-17");
-				$ratingText = "";
-				foreach ($ratingsList as $rating) {
-					if (str_contains($splitInfo[1], $rating)) {
-						$ratingText = $splitInfo[1];
-					}
-				}
-				$overviewMap[$ratingHeader] = $ratingText;
-				break;
-			case "MPAA RATING":
-				$mpaaRatingHeader = "MPAA RATING";	
-				$mpaaRatingsList = array("G", "PG", "PG-13", "R", "NC-17");
-				$mpaaRating = "";
-				foreach ($mpaaRatingsList as $rating) {
-					if (str_contains($splitInfo[1], $rating)) {
-						$mpaaRating = $splitInfo[1];
-					}
-				}
-				$overviewMap[$mpaaRatingHeader] = $mpaaRating;
-				break;
-			case "ESRB RATING":
-				$esrbRatingHeader = "ESRB RATING";
-				$esrbRatingsList = array("RP", "E", "E10+", "T", "M", "AO");
-				$esrbRating = "";
-				foreach ($esrbRatingsList as $rating) {
-					if (str_contains($splitInfo[1], $rating)) {
-						$esrbRating = $splitInfo[1];
-					}
-				}
-				$overviewMap[$esrbRatingHeader] = $esrbRating;
-				break;
-			case "THEATRICAL RELEASE":
-				$theatricalReleaseHeader = "THEATRICAL RELEASE";
-				$overviewMap[$theatricalReleaseHeader] = $splitInfo[1];
-				break;
-			case "RELEASE DATE":
-				$releaseHeader = "RELEASE DATE";	
-				$overviewMap[$releaseHeader] = $splitInfo[1];
-				break;
-			case "MOVIE SYNOPSIS":
-				$movieSynopsisHeader = "MOVIE SYNOPSIS";
-				$overviewMap[$movieSynopsisHeader] = $splitInfo[1];
-				break;
-			case "SYNOPSIS":
-				$synopsisHeader = "SYNOPSIS";	
-				$overviewMap[$synopsisHeader] = $splitInfo[1];
-				break;
-			case "SUBTITLE":
-				$subtitleHeader = "SUBTITLE";	
-				$overviewMap[$subtitleHeader] = $splitInfo[1];
-				break;
-			case "RELEASE COMPANY":
-				$releaseCompanyHeader = "RELEASE COMPANY";	
-				$overviewMap[$releaseCompanyHeader] = $splitInfo[1];
-				break;
-			case "DISTRIBUTORS":
-				$distributorsHeader = "DISTRIBUTORS";	
-				$overviewMap[$distributorsHeader] = $splitInfo[1];
-				break;
-			case "RUNTIME":
-				$runtimeHeader = "RUNTIME";	
-				$overviewMap[$runtimeHeader] = $splitInfo[1];
-				break;
-			case "GENRE":
-				$genreHeader = "GENRE";	
-				$overviewMap[$genreHeader] = $splitInfo[1];
-				break;
-			case "EXECUTIVE PRODUCER":
-				$executiveProduverHeader = "EXECUTIVE PRODUCER";	
-				$overviewMap[$executiveProduverHeader] = $splitInfo[1];
-				break;
-			case "LIGHTING AND SPECIAL EFFECTS":
-				$lightingSpecialEffectsHeader = "LIGHTING AND SPECIAL EFFECTS";	
-				$overviewMap[$lightingSpecialEffectsHeader] = $splitInfo[1];
-				break;
-			case "BOX OFFICE":
-				$boxOfficeHeader = "BOX OFFICE";	
-				$overviewMap[$boxOfficeHeader] = $splitInfo[1];
-				break;
-			case "LINKS":
-				$linksHeader = "LINKS";	
-				$overviewMap[$linksHeader] = $splitInfo[1];
-				break;
-		}
-	}
-	// error_log(print_r($overviewMap, TRUE)); 
-	return $overviewMap;
+ function buildFilmGeneralOverviewMap(string $filmName): array {
+ $overviewInfoList = file("$filmName/overview.txt");
+ $overviewMap = array();
+ foreach ($overviewInfoList as $info) {
+	 $splitInfo = explode(":", $info);
+	 $term = $splitInfo[0];
+	 $definition = $splitInfo[1];
+	 $overviewMap[$term] = $definition;
+ }
+ return $overviewMap;
 }
+// function buildFilmGeneralOverviewMap(string $filmName): array {
+// 	$overviewInfoList = file("$filmName/overview.txt");
+// 	$overviewMap = array();
+// 	foreach ($overviewInfoList as $info) {
+// 		$splitInfo = explode(":", $info);
+// 		$category = $splitInfo[0];
+// 		switch ($category) {
+// 			case "STARRING":
+// 				// Account for films like tmnt with line break delimiter 
+// 				if (str_contains($splitInfo[1], "<br />")) {
+// 					$castList = explode("<br />", $splitInfo[1]);
+// 				} else { // Comma delimited
+// 					$castList = explode(",", $splitInfo[1]);
+// 				}
+// 				$overviewMap["STARRING"] = $castList;
+// 				break;
+// 			case "DIRECTOR":
+// 				$director = explode(",", $splitInfo[1]);
+// 				$overviewMap["DIRECTOR"] = $director;
+// 				break;
+// 			case "PRODUCER":
+// 				$producer = explode(",", $splitInfo[1]);
+// 				$category = count($producer) > 1 ? "PRODUCERS" : "PRODUCER";
+// 				$overviewMap["PRODUCER"] = $producer;
+// 				break; 
+// 			case "SCREENWRITER":
+// 				$screenwriter = explode(",", $splitInfo[1]);
+// 				$category = count($screenwriter) > 1 ? "SCREENWRITERS" : "SCREENWRITER";
+// 				$overviewMap["SCREENWRITER"] = $screenwriter;
+// 				break; 
+// 			case "RATING":
+// 				$ratingHeader = "RATING";
+// 				$ratingsList = array("G", "PG", "PG-13", "R", "NC-17");
+// 				$ratingText = "";
+// 				foreach ($ratingsList as $rating) {
+// 					if (str_contains($splitInfo[1], $rating)) {
+// 						$ratingText = $splitInfo[1];
+// 					}
+// 				}
+// 				$overviewMap[$ratingHeader] = $ratingText;
+// 				break;
+// 			case "MPAA RATING":
+// 				$mpaaRatingHeader = "MPAA RATING";	
+// 				$mpaaRatingsList = array("G", "PG", "PG-13", "R", "NC-17");
+// 				$mpaaRating = "";
+// 				foreach ($mpaaRatingsList as $rating) {
+// 					if (str_contains($splitInfo[1], $rating)) {
+// 						$mpaaRating = $splitInfo[1];
+// 					}
+// 				}
+// 				$overviewMap[$mpaaRatingHeader] = $mpaaRating;
+// 				break;
+// 			case "ESRB RATING":
+// 				$esrbRatingHeader = "ESRB RATING";
+// 				$esrbRatingsList = array("RP", "E", "E10+", "T", "M", "AO");
+// 				$esrbRating = "";
+// 				foreach ($esrbRatingsList as $rating) {
+// 					if (str_contains($splitInfo[1], $rating)) {
+// 						$esrbRating = $splitInfo[1];
+// 					}
+// 				}
+// 				$overviewMap[$esrbRatingHeader] = $esrbRating;
+// 				break;
+// 			case "THEATRICAL RELEASE":
+// 				$theatricalReleaseHeader = "THEATRICAL RELEASE";
+// 				$overviewMap[$theatricalReleaseHeader] = $splitInfo[1];
+// 				break;
+// 			case "RELEASE DATE":
+// 				$releaseHeader = "RELEASE DATE";	
+// 				$overviewMap[$releaseHeader] = $splitInfo[1];
+// 				break;
+// 			case "MOVIE SYNOPSIS":
+// 				$movieSynopsisHeader = "MOVIE SYNOPSIS";
+// 				$overviewMap[$movieSynopsisHeader] = $splitInfo[1];
+// 				break;
+// 			case "SYNOPSIS":
+// 				$synopsisHeader = "SYNOPSIS";	
+// 				$overviewMap[$synopsisHeader] = $splitInfo[1];
+// 				break;
+// 			case "SUBTITLE":
+// 				$subtitleHeader = "SUBTITLE";	
+// 				$overviewMap[$subtitleHeader] = $splitInfo[1];
+// 				break;
+// 			case "RELEASE COMPANY":
+// 				$releaseCompanyHeader = "RELEASE COMPANY";	
+// 				$overviewMap[$releaseCompanyHeader] = $splitInfo[1];
+// 				break;
+// 			case "DISTRIBUTORS":
+// 				$distributorsHeader = "DISTRIBUTORS";	
+// 				$overviewMap[$distributorsHeader] = $splitInfo[1];
+// 				break;
+// 			case "RUNTIME":
+// 				$runtimeHeader = "RUNTIME";	
+// 				$overviewMap[$runtimeHeader] = $splitInfo[1];
+// 				break;
+// 			case "GENRE":
+// 				$genreHeader = "GENRE";	
+// 				$overviewMap[$genreHeader] = $splitInfo[1];
+// 				break;
+// 			case "EXECUTIVE PRODUCER":
+// 				$executiveProduverHeader = "EXECUTIVE PRODUCER";	
+// 				$overviewMap[$executiveProduverHeader] = $splitInfo[1];
+// 				break;
+// 			case "LIGHTING AND SPECIAL EFFECTS":
+// 				$lightingSpecialEffectsHeader = "LIGHTING AND SPECIAL EFFECTS";	
+// 				$overviewMap[$lightingSpecialEffectsHeader] = $splitInfo[1];
+// 				break;
+// 			case "BOX OFFICE":
+// 				$boxOfficeHeader = "BOX OFFICE";	
+// 				$overviewMap[$boxOfficeHeader] = $splitInfo[1];
+// 				break;
+// 			case "LINKS":
+// 				$linksHeader = "LINKS";	
+// 				$overviewMap[$linksHeader] = $splitInfo[1];
+// 				break;
+// 		}
+// 	}
+// 	// error_log(print_r($overviewMap, TRUE)); 
+// 	return $overviewMap;
+// }
 ?>
