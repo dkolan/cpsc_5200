@@ -54,13 +54,7 @@
 					<?= $filmScore ?>%
 				</div>
 				
-				<?php
-
-					$reviewFileList = glob($filmQueryParam . "/review*");
-					error_log(print_r("!!!!!!!!!!!!!!!DEBUG!!!!!!!!!!!!!!!!", TRUE)); 
-					error_log(print_r($reviewFileList, TRUE)); 
-					error_log(print_r(ceil(count($reviewFileList)/2), TRUE));
-					
+				<?php					
 					// Get list of review files
 					$reviewFileList = glob($filmQueryParam . "/review*");
 
@@ -131,7 +125,7 @@
  * @param  mixed $filmName = name of the film/url film query param
  * @return array
  */
-function getFilmInfo(string $filmName): array {
+function getFilmInfo($filmName) {
 	$fileInfoList = file("$filmName/info.txt");
 	return $fileInfoList;
 }
@@ -145,7 +139,7 @@ function getFilmInfo(string $filmName): array {
  * @param  mixed $filmName = name of the film/url film query parame
  * @return array A k:v map of the headers (key) and info (values) in the general overview section
  */
- function buildFilmGeneralOverviewMap(string $filmName): array {
+ function buildFilmGeneralOverviewMap($filmName) {
 	$overviewInfoList = file("$filmName/overview.txt");
 	$overviewMap = array();
 	foreach ($overviewInfoList as $info) {
