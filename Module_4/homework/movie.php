@@ -44,7 +44,6 @@
 				<?php
 					}
 				?>
-					<br	/>
 				</dl>
 			</div>
 
@@ -55,120 +54,65 @@
 					<?= $filmScore ?>%
 				</div>
 				
-				<div class="review-column-left">
-					<div class="review">
-						<p class="review-paragraph">
-							<img src="rotten.gif" alt="Rotten" />
-							<q>Ditching the cheeky, self-aware wink that helped to excuse the concept's inherent corniness, the movie attempts to look polished and 'cool,' but the been-there animation can't compete with the then-cutting-edge puppetry of the 1990 live-action movie.</q>
-						</p>
-						<p class="review-author">
-							<img src="critic.gif" alt="Critic" />
-							Peter Debruge <br />
-							Variety
-						</p>
-					</div>
-					<div class="review">
-						<p class="review-paragraph">
-							<img src="fresh.gif" alt="Fresh" />
-							<q>TMNT is a fun, action-filled adventure that will satisfy longtime fans and generate a legion of new ones.</q>
-						</p>
-						<p class="review-author">
-							<img src="critic.gif" alt="Critic" />
-							Todd Gilchrist <br />
-							IGN Movies
-						</p>
-					</div>
-					<div class="review">
-						<p class="review-paragraph">
-							<img src="rotten.gif" alt="Rotten" />
-							<q>It stinks!</q>
-						</p>
-						<p class="review-author">
-							<img src="critic.gif" alt="Critic" />
-							Jay Sherman (unemployed)
-						</p>
-					</div>
-					<div class="review">
-						<p class="review-paragraph">
-							<img src="rotten.gif" alt="Rotten" />
-							<q>The rubber suits are gone and they've been redone with fancy computer technology, but that hasn't stopped them from becoming dull.</q>
-						</p>
-						<p class="review-author">
-							<img src="critic.gif" alt="Critic" />
-							Joshua Tyler <br />
-							CinemaBlend.com
-						</p>
-					</div>
-					<div class="review">
-						<p class="review-paragraph">
-							<img src="rotten.gif" alt="Rotten" />
-							<q>Brings us all together in paralyzing boredom.</q>
-						</p>
-						<p class="review-author">
-							<img src="critic.gif" alt="Critic" />
-							Roger Ebert <br />
-							Chicago Sun Times
-						</p>
-					</div>
-				</div>
-					<div class="review-column-right">
-						<div class="review">
-							<p class="review-paragraph">
-								<img src="rotten.gif" alt="Rotten" />
-								<q>The turtles themselves may look prettier, but are no smarter; torn irreparably from their countercultural roots, our superheroes on the half shell have been firmly co-opted by the industry their creators once sought to spoof.</q>
-							</p>
-							<p class="review-author">
-								<img src="critic.gif" alt="Critic" />
-								Jeannette Catsoulis <br />
-								New York Times
-							</p>
+				<?php
+
+					$reviewFileList = glob($filmQueryParam . "/review*");
+					error_log(print_r("!!!!!!!!!!!!!!!DEBUG!!!!!!!!!!!!!!!!", TRUE)); 
+					error_log(print_r($reviewFileList, TRUE)); 
+					error_log(print_r(ceil(count($reviewFileList)/2), TRUE));
+					
+					// Get list of review files
+					$reviewFileList = glob($filmQueryParam . "/review*");
+
+					// Calculate # of reviews in left column (-1 to account for 0 indexing)
+					$leftColReviewCount = ceil(count($reviewFileList)/2) - 1;
+
+					?>
+					<div class="review-container">
+						<div class="review-column">
+					<?php
+
+					// Loop through review file list
+					// If $i > $leftColReviewCount, belongs in right col, else left
+					for($i = 0; $i < count($reviewFileList); $i++) {
+
+						// Reviews have exactly 4 lines: review, fresh/rotten, name, publication
+						$reviewFileLines = file($reviewFileList[$i]);
+						$reviewText = trim($reviewFileLines[0]);
+						$freshOrRotten = trim($reviewFileLines[1]);
+						$criticName = trim($reviewFileLines[2]);
+						$criticPublication = trim($reviewFileLines[3]);
+						?>
+
+							<div class="review">
+								<p class="review-paragraph">
+									<!-- Ternary based on 2nd line -->
+									<img src=<?= (strcasecmp($freshOrRotten, "FRESH") == 0) ? "fresh.gif" : "rotten.gif" ?> 
+										alt=<?= (strcasecmp($freshOrRotten, "FRESH") == 0) ? "Fresh" : "Rotten" ?> />  
+									<q><?= $reviewText ?></q>
+								</p>
+								<p class="review-author">
+									<img src="critic.gif" alt="Critic" />
+									<?= $criticName ?> <br />
+									<?= $criticPublication ?>
+								</p>
+							</div>
+						
+						<?php
+						// If left column amount reached, make next column div
+						if($i == $leftColReviewCount) {
+							?>
 						</div>
-						<div class="review">
-							<p class="review-paragraph">
-								<img src="rotten.gif" alt="Rotten" />
-								<q>Impersonally animated and arbitrarily plotted, the story appears to have been made up as the filmmakers went along.</q>
-							</p>
-							<p class="review-author">
-								<img src="critic.gif" alt="Critic" />
-								Ed Gonzalez <br />
-								Slant Magazine
-							</p>
-						</div>
-						<div class="review">
-							<p class="review-paragraph">
-								<img src="fresh.gif" alt="Fresh" />
-								<q>The striking use of image and motion allows each sequence to leave an impression. It's an accomplished restart to this franchise.</q>
-							</p>
-							<p class="review-author">
-								<img src="critic.gif" alt="Critic" />
-								Mark Palermo <br />
-								Coast (Halifax, Nova Scotia)
-							</p>
-						</div>
-						<div class="review">
-							<p class="review-paragraph">
-								<img src="rotten.gif" alt="Rotten" />
-								<q>The script feels like it was computer generated. This mechanical presentation lacks the cheesy charm of the three live action films.</q>
-							</p>
-							<p class="review-author">
-								<img src="critic.gif" alt="Critic" />
-								Steve Rhodes <br />
-								Internet Reviews
-							</p>
-						</div>
-						<div class="review">
-							<p class="review-paragraph">
-								<img src="rotten.gif" alt="Rotten" />
-								<q>Is this film more interesting than a documentary of the same actors having lunch?</q>
-							</p>
-							<p class="review-author">
-								<img src="critic.gif" alt="Critic" />
-								Gene Siskel <br />
-								Chicago Tribune
-							</p>
+						<div class="review-column">
+							<?php
+						}
+					}
+					?>
 						</div>
 					</div>
-				</div>
+					<?php
+				?>
+			</div>
 			<div class="page-count-container">
 				<p class="page-count-text">(1-10) of 88</p>
 			</div>
