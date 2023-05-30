@@ -36,6 +36,7 @@
 					$generalOverviewInfoMap = buildFilmGeneralOverviewMap($filmQueryParam);
 				?>
 				<dl>
+				<!-- Iterate over general overview data and render terms/definitions -->
 				<?php
 					foreach ($generalOverviewInfoMap as $infoKey => $infoVal) {
 				?>
@@ -80,7 +81,7 @@
 
 							<div class="review">
 								<p class="review-paragraph">
-									<!-- Ternary based on 2nd line -->
+									<!-- Set review fresh/rotten image and review text, critic, and publication -->
 									<img src=<?= (strcasecmp($freshOrRotten, "FRESH") == 0) ? "fresh.gif" : "rotten.gif" ?> 
 										alt=<?= (strcasecmp($freshOrRotten, "FRESH") == 0) ? "Fresh" : "Rotten" ?> />  
 									<q><?= $reviewText ?></q>
@@ -129,7 +130,6 @@ function getFilmInfo($filmName) {
 	$fileInfoList = file("$filmName/info.txt");
 	return $fileInfoList;
 }
-
 
 /**
  * buildFilmGeneralOverviewMap
