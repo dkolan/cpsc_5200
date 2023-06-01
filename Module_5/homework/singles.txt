@@ -1,6 +1,47 @@
-Anakin Skywalker,male,27,INTJ,Linux,25,50
-Nostalgia Critic,male,28,ENTJ,Linux,49,62
-Marty Stepp,male,30,ISTJ,Linux,1,99
-Anakin Match,female,30,ISTJ,Linux,1,99
-John Smith,female,39,BUTT,Windows,1,99
-John Smith,male,30,JJJJ,Linux,1,99
+Emma Wilson,female,29,ENFJ,Windows,25,35
+Noah Johnson,male,42,INTP,Mac OS X,40,55
+Olivia Davis,female,36,ISFP,Mac OS X,30,45
+Liam Martinez,male,23,ESFJ,Windows,18,30
+Ava Thompson,female,47,ISTP,Mac OS X,45,60
+Lucas Anderson,male,37,ENTP,Windows,35,45
+Sophia Taylor,female,32,ESTJ,Mac OS X,30,40
+Jackson Smith,male,26,INTJ,Windows,22,35
+Isabella Johnson,female,54,INFP,Mac OS X,50,65
+Aiden Davis,male,19,ENTJ,Windows,18,25
+Mia Thompson,female,39,ESTP,Mac OS X,35,50
+Elijah Wilson,male,40,ISFJ,Windows,35,50
+Charlotte Anderson,female,24,INFJ,Mac OS X,18,30
+Henry Brown,male,46,ENFP,Windows,40,55
+Amelia Davis,female,34,ISTJ,Mac OS X,30,40
+Mason Johnson,male,27,ESFP,Windows,25,35
+Harper Smith,female,43,INTP,Mac OS X,40,55
+Logan Martinez,male,33,ENFJ,Windows,30,40
+Grace Wilson,female,51,ISFP,Mac OS X,50,65
+Sophie Thompson,female,26,ESTJ,Windows,22,35
+Daniel Davis,male,30,ENTP,Mac OS X,25,35
+Emily Johnson,female,38,INTJ,Windows,35,50
+Benjamin Anderson,male,44,INFP,Mac OS X,40,55
+Chloe Smith,female,28,ESTP,Windows,25,35
+Alexander Taylor,male,31,ESFJ,Mac OS X,30,40
+Ella Davis,female,35,INFJ,Windows,30,40
+William Martinez,male,37,ENFP,Mac OS X,35,45
+Nora Wilson,female,46,ISTJ,Windows,40,55
+James Thompson,male,49,ISFP,Mac OS X,45,60
+Victoria Johnson,female,32,ENTJ,Windows,30,40
+David Davis,male,41,INTP,Mac OS X,40,55
+Grace Smith,female,39,ESTJ,Windows,35,45
+Joseph Wilson,male,27,ISFJ,Mac OS X,25,35
+Sophia Anderson,female,52,ENFJ,Windows,50,65
+Michael Johnson,male,34,ISTP,Mac OS X,30,45
+Emily Davis,female,31,ESFP,Windows,30,40
+Daniel Smith,male,38,INTJ,Mac OS X,35,45
+Sophia Wilson,female,50,INFP,Windows,45,60
+Jacob Thompson,male,36,ESTP,Mac OS X,35,45
+Isabella Davis,female,27,ESFJ,Windows,25,35
+Alexander Johnson,male,43,ENTP,Mac OS X,40,55
+Olivia Smith,female,33,INFJ,Windows,30,40
+Mason Martinez,male,39,ENFP,Mac OS X,35,45
+Emily Wilson,female,41,ISTJ,Windows,40,55
+Matthew Thompson,male,26,ISFP,Mac OS X,22,35
+Sophia Brown,female,37,ESTJ,Windows,35,45
+Liam Davis,male,44,INTP,Mac OS X,40,55
