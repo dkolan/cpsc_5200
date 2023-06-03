@@ -1,3 +1,14 @@
+<!-- 
+Dan Kolan
+CPSC 5200 Web Development I
+Project 3: Movie Review Part II (PHP)
+
+In this assignment, I adapted the Rancid Tomatoes site created in the previous
+project and added dynamic features by utilizing PHP. The user passes a query
+parameter that corresponds to a film, and the site retrieves the information
+that corresponds to that film.
+-->
+
 <!DOCTYPE html>
 <html>
 	<!-- Get the film info from the query param's corresponding info.txt -->
