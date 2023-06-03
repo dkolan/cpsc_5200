@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
+	<!-- Get the film info from the query param's corresponding info.txt -->
+	<?php
+		$filmQueryParam = $_GET["film"];
+		$filmInfoList = getFilmInfo($filmQueryParam);			
+		$filmName = trim($filmInfoList[0]);
+		$filmYear = trim($filmInfoList[1]);
+		$filmScore = trim($filmInfoList[2]);
+	?>
 	<head>
-		<title>TMNT - Rancid Tomatoes</title>
+		<title><?= $filmName ?> - Rancid Tomatoes</title>
 
 		<meta charset="utf-8" />
 		<link href="movie.css" type="text/css" rel="stylesheet" />
@@ -10,18 +18,9 @@
 
 	<body>
 		<div id="banner-top">
-			<img id="banner-logo" src="banner.png" alt="Rancid Tomatoes" />
+			<img src="banner.png" alt="Rancid Tomatoes" />
 		</div>
 	
-		<!-- Get the film info from the query param's corresponding info.txt -->
-		<?php
-			$filmQueryParam = $_GET["film"];
-			$filmInfoList = getFilmInfo($filmQueryParam);			
-			$filmName = trim($filmInfoList[0]);
-			$filmYear = trim($filmInfoList[1]);
-			$filmScore = trim($filmInfoList[2]);
-		?>
-
 		<h1 class="movie-title"><?= $filmName ?> (<?= $filmYear?>) </h1>
 		
 		<div class="overall-content-container">
@@ -52,7 +51,7 @@
 				<div class="score-container">
 					<!-- Assign the score logo depending on whether the score is Rotten (<60) or Fresh (>= 60) -->
 					<img id="rotten-logo" src=<?= ($filmScore < 60) ? "rottenbig.png" : "freshbig.png" ?> alt="Rotten" />
-					<?= $filmScore ?>%
+					<span id="avg-rating"><?= $filmScore ?>%</span>
 				</div>
 				
 				<?php					
