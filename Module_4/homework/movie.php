@@ -69,12 +69,14 @@ that corresponds to that film.
 					// Get list of review files
 					$reviewFileList = glob($filmQueryParam . "/review*");
 
-					// Calculate # of reviews in left column (-1 to account for 0 indexing)
-					$leftColReviewCount = ceil(count($reviewFileList)/2) - 1;
+					// Calculate # of reviews in left column
+					$leftColReviewCount = ceil(count($reviewFileList)/2);
+					error_log(print_r("!!!!!!!!!!!!!!! DEBUG !!!!!!!!!!!!!!!\nleftColReviewCount=".$leftColReviewCount, TRUE)); 
+					error_log(print_r("!!!!!!!!!!!!!!! DEBUG !!!!!!!!!!!!!!!\count(reviewFileList)=".count($reviewFileList), TRUE)); 
 
 					?>
 					<div class="review-container">
-						<div class="review-column">
+						<div class="review-column-left">
 					<?php
 
 					// Loop through review file list
@@ -104,16 +106,17 @@ that corresponds to that film.
 							</div>
 						
 						<?php
+
 						// If left column amount reached, make next column div
-						if($i == $leftColReviewCount) {
+						if($i+1 == $leftColReviewCount) {
 							?>
-						</div>
-						<div class="review-column">
+							</div>
+							<div class="review-column-right">
 							<?php
 						}
 					}
 					?>
-						</div>
+					</div>
 					</div>
 					<?php
 				?>

@@ -90,14 +90,20 @@ body {
 }
 
 .review-container {
-    column-count: 2;
-    column-gap: 2%;
     margin: 0% 2%;
+    display: flex;
 }
 
-.review-column {
-    width: auto;
+.review-column-left {
+    width: 50%;
     float: left;
+    margin-right: 1%;
+}
+
+.review-column-right {
+    width: 50%;
+    float: right;
+    margin-left: 1%;
 }
 
 .review {
