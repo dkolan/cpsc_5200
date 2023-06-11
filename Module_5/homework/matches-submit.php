@@ -1,5 +1,5 @@
 <?php include("top.html"); 
-$userName = $_GET["name"];
+$userName = trim($_GET["name"]);
 ?>
 
 <!-- <h1>Matches for <?= $userName ?></h1> -->
@@ -71,7 +71,10 @@ $userName = $_GET["name"];
                 </p>
                 <ul>
                     <strong>gender:</strong>
-                    <?= $match["gender"] ?><br />
+
+                    <?= strcasecmp($match["gender"], "female") == 0 ? "F" : "M" ?><br />
+
+                    <!-- <?= $match["gender"] ?><br /> -->
                     <strong>age:</strong>
                     <?= $match["age"] ?><br />
                     <strong>type:</strong>
