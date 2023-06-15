@@ -1,0 +1,64 @@
+html {
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #F5F4FA;
+}
+
+.login-container {
+    border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    padding: 20px;
+    background-color: #FFFFFF;
+    width: 300px;
+    text-align: center;
+}
+
+.login-container h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+input:focus {
+    outline: none !important;
+    border-color: #b5b5b5;
+    box-shadow: 0 0 10px #CCCCCC;
+}
+
+.login-container .text-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.login-container .text-input::placeholder {
+    font-size: 1rem;
+}
+
+.login-container .remember-checkbox {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0C8E41;
+    font-size: 1rem;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    transition: 0.2s ease-in-out;
+}
+
+.login-container button:hover {
+    background-color: #0d7b39;
+}
