@@ -8,15 +8,24 @@
 </head>
 
 <?php
-password_
+$userEmail = $_POST["email"];
+$username = $_POST["username"];
+$password = $_POST["password"];
+
+// "Write" to the user file
+$data = $userEmail . ',' . $username . ',' . $password . "\n";
+
+$file = fopen("data/users.csv", "a"); // Open the file in append mode
+fwrite($file, $data); // Write the data to the file
+fclose($file); // Close the file
 ?>
 
 <body>
     <div class="login-container">
         <h2>Setlist Tracker</h2>
-        <form>
-            <input class="text-input" type="text" placeholder="Username" required="true">
-            <input class="text-input" type="password" placeholder="Password" required="true">
+        <form action="setlists.php" method="post">
+            <input name="username" class="text-input" type="text" placeholder="Username" required="true">
+            <input name="password" class="text-input" type="password" placeholder="Password" required="true">
             <div class="remember-checkbox"><label><input type="checkbox" /> Remember me</label></div>
             <button type="submit">Login</button>
         </form>
