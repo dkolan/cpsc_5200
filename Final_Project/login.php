@@ -1,3 +1,36 @@
+<?php
+// Includes
+include 'sql_lib.php';
+
+// SQL
+$conn = createConnection();
+
+// Params from register.php
+$userEmail = $_POST["email"];
+$username = $_POST["username"];
+$password = $_POST["password"];
+$dateCreated = date('Y-m-d H:i:s');
+
+// Prepare sql statement
+$sql = "INSERT INTO st_users (email, username, password, date_created)
+        VALUES (?, ?, ?, ?)";
+
+$stmt = $conn->prepare($sql);
+
+$stmt->bind_param("ssss", $userEmail, $username, $password, $dateCreated);
+
+// Execute the statement
+if ($stmt->execute()) {
+    // Modal for user created?
+} else {
+    // Modal for error? $stmt->error;
+}
+
+// Close myslqi objs
+$stmt->close();
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,16 +41,16 @@
 </head>
 
 <?php
-$userEmail = $_POST["email"];
-$username = $_POST["username"];
-$password = $_POST["password"];
+// $userEmail = $_POST["email"];
+// $username = $_POST["username"];
+// $password = $_POST["password"];
 
-// "Write" to the user file
-$data = $userEmail . ',' . $username . ',' . $password . "\n";
+// // "Write" to the user file
+// $data = $userEmail . ',' . $username . ',' . $password . "\n";
 
-$file = fopen("data/users.csv", "a"); // Open the file in append mode
-fwrite($file, $data); // Write the data to the file
-fclose($file); // Close the file
+// $file = fopen("data/users.csv", "a"); // Open the file in append mode
+// fwrite($file, $data); // Write the data to the file
+// fclose($file); // Close the file
 ?>
 
 <body>
