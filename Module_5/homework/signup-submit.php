@@ -1,9 +1,22 @@
+<!-- 
+Dan Kolan
+CPSC 5200 Web Development I
+Project 4: NerdLuv (HTML Forms and PHP)
+
+In this page I display and process the user information submitted via the POST
+from signup.php.
+-->
 <?php include("top.html"); ?>
 
-<strong>Thank you!</strong><br /><br />
-Welcome to NerdLuv, <?= $_POST["name"] ?>!<br /><br />
-Now <a href="matches.php">log in to see your matches!</a><br /><br />
+<!-- Display the users name found in the POST array. -->
+<p><strong>Thank you!</strong></p>
+<p>Welcome to NerdLuv, <?= $_POST["name"] ?>!</p>
+<p>Now <a href="matches.php">log in to see your matches!</a></p>
 
+<!--
+Extract the users submitted information from the POST array.
+Write those values to the CSV file we use for storage: singles.txt.
+-->
 <?php
 $name = $_POST["name"];
 $gender = $_POST["gender"];
