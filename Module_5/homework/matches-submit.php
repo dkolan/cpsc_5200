@@ -1,8 +1,14 @@
+<!-- 
+Dan Kolan
+CPSC 5200 Web Development I
+Project 4: NerdLuv (HTML Forms and PHP)
+
+In this page I display and process the user information submitted via the POST
+from matches.php.
+-->
 <?php include("top.html"); 
 $userName = trim($_GET["name"]);
 ?>
-
-<!-- <h1>Matches for <?= $userName ?></h1> -->
 
 <?php
     // Get users, create map for each user in CSV
@@ -21,6 +27,7 @@ $userName = trim($_GET["name"]);
         }
     }
 
+    // If returning user is found
     if (!empty($returningUserProfile)) {
         ?>
         <h1>Matches for <?= $userName ?></h1>
@@ -34,34 +41,41 @@ $userName = trim($_GET["name"]);
         $returningUserMaxAge = intval($returningUserProfile["maxAge"]);
         $returningUserPersonality = str_split($returningUserProfile["personalityType"]);
     
-        // Iterate through all users
+        // Iterate through all users and ensure they meet the requirements for compatibility
+        // as outlined in the assignment.
         foreach($csv as $user) {
+            // Opposite genders. ¯\_(ツ)_/¯
             if (strcasecmp($user["gender"], $returningUserProfile["gender"]) == 0) {
                 continue;
             }
-    
+            
+            // Falls within the right age ranges.
             $potentialMatchAge = intval($user["age"]);
             $potentialMatchMinAge = intval($user["minAge"]);
             $potentialMatchMaxAge = intval($user["maxAge"]);
-            if ($returningUserAge < $potentialMatchMinAge ||
-                $returningUserAge > $potentialMatchMaxAge ||
-                $potentialMatchAge < $returningUserMinAge ||
-                $potentialMatchAge > $returningUserMaxAge) {
+            if ($returningUserAge <= $potentialMatchMinAge ||
+                $returningUserAge >= $potentialMatchMaxAge ||
+                $potentialMatchAge <= $returningUserMinAge ||
+                $potentialMatchAge >= $returningUserMaxAge) {
                 continue;
             }
     
+            // Compatible OS choices.
             if (strcasecmp($user["os"], $returningUserProfile["os"]) != 0) {
                 continue; 
             }
     
+            // Personality type has one letter in common.
             $potentialMatchPersonality = str_split($user["personalityType"]);
-            if (array_intersect($returningUserPersonality, $potentialMatchPersonality) == 0) {
+            if (count(array_intersect($returningUserPersonality, $potentialMatchPersonality)) == 0) {
                 continue;
             }
-    
+            
+            // Add user to matches array
             $matches[] = $user;
         }
     
+        // Iterate through the matches array and render the HTML elements for matches.
         foreach($matches as $match) {
             ?>
             <div class="match">
@@ -70,23 +84,28 @@ $userName = trim($_GET["name"]);
                     <?= $match["name"] ?> 
                 </p>
                 <ul>
-                    <strong>gender:</strong>
-
-                    <?= strcasecmp($match["gender"], "female") == 0 ? "F" : "M" ?><br />
-
-                    <!-- <?= $match["gender"] ?><br /> -->
-                    <strong>age:</strong>
-                    <?= $match["age"] ?><br />
-                    <strong>type:</strong>
-                    <?= $match["personalityType"] ?><br />
-                    <strong>OS:</strong>
-                    <?= $match["os"] ?><br />
+                    <li>
+                        <strong>gender:</strong>
+                        <!-- String validation, compare genders -->
+                        <?= strcasecmp($match["gender"], "female") == 0 ? "F" : "M" ?>
+                    </li>
+                    <li>
+                        <strong>age:</strong>
+                        <?= $match["age"] ?>
+                    </li>
+                    <li>
+                        <strong>type:</strong>
+                        <?= $match["personalityType"] ?>
+                    </li>
+                    <li>
+                        <strong>OS:</strong>
+                        <?= $match["os"] ?>
+                    </li>
                 </ul>
-    
             </div>
         <?php
         }
-    } else {
+    } else { // In case user is not found in file -- just nice despite it not being in the requirements.
         ?>
         <h1>User not found!</h1>
         <?php
