@@ -25,7 +25,7 @@ authUser($_POST["username"], $_POST["password"]);
                     <a class="menu-link" href="#">New Setlist</a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="#">New Song</a>
+                    <a class="menu-link" href="new-song.php">New Song</a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="#">All Songs</a>

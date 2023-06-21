@@ -11,7 +11,6 @@ body {
 }
 
 .menu {
-    /* width: 100%; */
     margin: 0 auto;
     height: 60px;
     display: flex;
@@ -41,6 +40,107 @@ body {
     border-bottom: 2px solid #FFFFFF;
 }
 
-.ml-auto {
-    margin-left: auto;
+.add-song-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.form-container {
+    width: 25%;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+.form-title {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group-inline {
+    display: flex;
+    align-items: center;
+}
+
+.form-group-inline label {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.form-group-inline input {
+    display: inline-block;
+}
+
+.form-group-inline.centered-text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-group-inline label.centered-text {
+    display: inline-block;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.form-group.half-width,
+.form-group.quarter-width {
+    margin-right: 10px;
+}
+
+.form-group.full-width,
+.form-group.full-width label {
+    width: 100%;
+}
+
+.form-group.half-width {
+    width: 50%;
+}
+
+.form-group.quarter-width {
+    width: 25%;
+}
+
+.form-group.quarter-width #original-key{
+    margin-right: auto; 
+    margin-left: 0;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-container button {
+    width: 100%;
+    margin-top: 25px;
+    background-color: #0C8E41;
+    font-size: 1.5rem;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    transition: 0.2s ease-in-out;
+}
+
+.form-container button:hover {
+    background-color: #0d7b39;
 }
