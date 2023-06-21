@@ -67,7 +67,7 @@ function authUser($username, $password) {
     $validPassword = $hasher->CheckPassword($password, $storedHash);
 
     if ($validPassword) {
-        echo $username . "logged in.";
+        // echo $username . "logged in.";
     } else {
         // Failed login, redirect to login.php
         header('Location: login.php');
