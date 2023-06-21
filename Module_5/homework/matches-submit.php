@@ -53,10 +53,10 @@ $userName = trim($_GET["name"]);
             $potentialMatchAge = intval($user["age"]);
             $potentialMatchMinAge = intval($user["minAge"]);
             $potentialMatchMaxAge = intval($user["maxAge"]);
-            if ($returningUserAge <= $potentialMatchMinAge ||
-                $returningUserAge >= $potentialMatchMaxAge ||
-                $potentialMatchAge <= $returningUserMinAge ||
-                $potentialMatchAge >= $returningUserMaxAge) {
+            if ($returningUserAge < $potentialMatchMinAge ||
+                $returningUserAge > $potentialMatchMaxAge ||
+                $potentialMatchAge < $returningUserMinAge ||
+                $potentialMatchAge > $returningUserMaxAge) {
                 continue;
             }
     
@@ -87,7 +87,7 @@ $userName = trim($_GET["name"]);
                     <li>
                         <strong>gender:</strong>
                         <!-- String validation, compare genders -->
-                        <?= strcasecmp($match["gender"], "female") == 0 ? "F" : "M" ?>
+                        <?= strcasecmp($match["gender"], "f") == 0 ? "F" : "M" ?>
                     </li>
                     <li>
                         <strong>age:</strong>
