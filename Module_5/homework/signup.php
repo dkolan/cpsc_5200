@@ -26,7 +26,7 @@ Then I submit the data via a POST to signup-submit.php for further processesing.
             </p>
             <p>
                 <strong><label class="left">Personality type:</label></strong>
-                <input name="personality" type="text" size="6" maxlength="42"> (<a href="https://www.humanmetrics.com/personality">Don't know your type?</a>)
+                <input name="personality" type="text" size="6" maxlength="4"> (<a href="https://www.humanmetrics.com/personality">Don't know your type?</a>)
             </p>
             <p>
                 <strong><label class="left">Favorite OS:</label></strong>
