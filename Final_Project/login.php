@@ -2,14 +2,24 @@
 // Includes
 include 'includes/sql_lib.php';
 
-createUser($_POST["email"],
-    $_POST["username"],
-    $_POST["password"],
-    date('Y-m-d H:i:s'));
+if (!empty($_POST)) {
+    $userCreated = createUser(
+            $_POST["email"],
+            $_POST["username"],
+            $_POST["password"],
+            date('Y-m-d H:i:s')
+        );
+    $userCreatedMsg = $userCreated ? "Registration Successful." : "Registration Unsuccessful.";
+} else
+{
+    $postIsEmpty = true;
+}
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +29,16 @@ createUser($_POST["email"],
 
 <body>
     <div class="login-container">
+        <?php
+        if (!empty($_POST))
+        {
+        ?>
+            <span class="user-created-msg">
+                <?= $userCreatedMsg ?>
+            </span>
+        <?php
+        }
+        ?>
         <h2>Setlist Tracker</h2>
         <form action="setlists.php" method="post">
             <input name="username" class="text-input" type="text" placeholder="Username" required="true">
@@ -29,4 +49,5 @@ createUser($_POST["email"],
         <a href="register.php">Register for an account.</a>
     </div>
 </body>
+
 </html>

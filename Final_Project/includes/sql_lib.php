@@ -2,12 +2,13 @@
 
 include 'phpass-0.5/PasswordHash.php';
 
-function createConnection() {
+function createConnection()
+{
     $servername = "sysmysql8.auburn.edu";
     $username = "dzk0077";
     $password = "Petty2-Gallon-Audibly";
     $db = "dzk0077db";
-    
+
     // Create connection
     $conn = new mysqli($servername, $username, $password, $db);
 
@@ -18,7 +19,13 @@ function createConnection() {
     return $conn;
 }
 
-function createUser($email, $username, $password, $date) {
+function createUser($email, $username, $password, $date)
+{
+    if(userExists($email, $username) > 0)
+    {
+        return false;
+    }
+
     $conn = createConnection();
 
     // Prepare sql statement
@@ -43,9 +50,11 @@ function createUser($email, $username, $password, $date) {
     // Close myslqi objs
     $stmt->close();
     $conn->close();
+    return true;
 }
 
-function authUser($username, $password) {
+function authUser($username, $password)
+{
     $conn = createConnection();
 
     // Prepare the SQL query with placeholders
@@ -76,5 +85,21 @@ function authUser($username, $password) {
     // Close myslqi objs
     $stmt->close();
     $conn->close();
+}
+
+function userExists($emailPost, $usernamePost)
+{
+    $conn = createConnection();
+    $sql = "SELECT COUNT(*) FROM st_users WHERE email = ? OR username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $emailPost, $usernamePost);
+
+    $stmt->execute();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+
+    $stmt->close();
+    $conn->close();
+    return $count;
 }
 ?>
