@@ -1,6 +1,37 @@
 <?php
 // Includes
-include 'includes/sql_lib.php';
+include 'App/Controllers/SongController.php';
+include 'App/Models/Song.php';
+use \App\Controllers\SongController;
+use \App\Models\Song;
+
+$songController = new SongController();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $songTitle = $_POST['song-title'];
+    $artists = $_POST['artist'];
+    $tempo = $_POST['tempo'];
+    $songKey = $_POST['key'];
+    $originalKey = isset($_POST['original-key']) ? true : false;
+    $link = $_POST['link'];
+    $notes = $_POST['notes'];
+
+    $song = new Song();
+    $song->setUserId($_COOKIE['user_id']);
+    $song->setSongTitle($songTitle);
+    $song->setArtists($artists);
+    $song->setTempo($tempo);
+    $song->setSongKey($songKey);
+    $song->setOriginalKey($originalKey);
+    $song->setLink($link);
+    $song->setNotes($notes);
+
+    $songId = $songController->create($song);
+
+    if ($songId) {
+    } else {
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +48,7 @@ include 'includes/sql_lib.php';
         <nav class="menu">
             <ul class="menu-nav">
                 <li class="menu-item">
-                    <a class="menu-link" href="#">Setlists Home</a>
+                    <a class="menu-link" href="setlists.php">Setlists Home</a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="#">New Setlist</a>
@@ -36,7 +67,7 @@ include 'includes/sql_lib.php';
     <div class="add-song-container">
         <div class="form-container">
             <h2 class="centered-text form-title">Add/Edit Song</h2>
-            <form>
+            <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
                 <div class="form-group full-width">
                     <label for="song-title">Song Title</label>
                     <input type="text" id="song-title" name="song-title">
@@ -50,23 +81,23 @@ include 'includes/sql_lib.php';
                 <div class="form-group-inline">
                     <div class="form-group half-width">
                         <label for="tempo">Tempo</label>
-                        <input type="text" id="tempo" name="tempo">
+                        <input type="number" id="tempo" name="tempo">
                     </div>
 
                     <div class="form-group quarter-width">
                         <label for="key">Key</label>
                         <select id="key" name="key">
                             <option value="C">C</option>
-                            <option value="C#">C#</option>
+                            <option value="C#">C#/Db</option>
                             <option value="D">D</option>
-                            <option value="D#">D#</option>
+                            <option value="D#">D#/Eb</option>
                             <option value="E">E</option>
                             <option value="F">F</option>
-                            <option value="F#">F#</option>
+                            <option value="F#">F#/Gb</option>
                             <option value="G">G</option>
-                            <option value="G#">G#</option>
+                            <option value="G#">G#/Ab</option>
                             <option value="A">A</option>
-                            <option value="A#">A#</option>
+                            <option value="A#">A#/Bb</option>
                             <option value="B">B</option>
                         </select>
                     </div>

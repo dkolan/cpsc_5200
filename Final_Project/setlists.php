@@ -19,7 +19,7 @@ authUser($_POST["username"], $_POST["password"]);
         <nav class="menu">
             <ul class="menu-nav">
                 <li class="menu-item">
-                    <a class="menu-link" href="#">Setlists Home</a>
+                    <a class="menu-link" href="setlists.php">Setlists Home</a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="#">New Setlist</a>

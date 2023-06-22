@@ -1,5 +1,4 @@
 <?php
-
 include 'phpass-0.5/PasswordHash.php';
 
 function createConnection()
@@ -62,13 +61,13 @@ function authUser($username, $password)
     // $stmt = $conn->prepare($sql);
     // $stmt->bind_param("s", $usernamePost);
 
-    $sql = "SELECT password FROM st_users WHERE username = ?";
+    $sql = "SELECT id, password FROM st_users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
 
     // Execute the statement
     $stmt->execute();
-    $stmt->bind_result($storedHash);
+    $stmt->bind_result($id, $storedHash);
     $stmt->fetch();
 
     // Check password
@@ -76,6 +75,7 @@ function authUser($username, $password)
     $validPassword = $hasher->CheckPassword($password, $storedHash);
 
     if ($validPassword) {
+        setcookie('user_id', $id, time() + 3600, '/');
         // echo $username . "logged in.";
     } else {
         // Failed login, redirect to login.php
