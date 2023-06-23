@@ -2,7 +2,6 @@
 // Includes
 include 'includes/sql_lib.php';
 
-authUser($_POST["username"], $_POST["password"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,5 +34,4 @@ authUser($_POST["username"], $_POST["password"]);
         </nav>
     </div>
 </body>
-
 </html>

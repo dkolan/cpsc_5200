@@ -1,18 +1,29 @@
 <?php
 // Includes
-include 'includes/sql_lib.php';
+include 'App/Controllers/UserController.php';
+include 'App/Models/User.php';
+use \App\Controllers\UserController;
+use \App\Models\User;
 
-if (!empty($_POST)) {
-    $userCreated = createUser(
-            $_POST["email"],
-            $_POST["username"],
-            $_POST["password"],
-            date('Y-m-d H:i:s')
-        );
-    $userCreatedMsg = $userCreated ? "Registration Successful." : "Registration Unsuccessful.";
-} else
-{
-    $postIsEmpty = true;
+$userController = new UserController();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $user = new User();
+    $user->setUsername($username);
+    $user->setPassword($password);
+
+    $userId = $userController->authUser($user);
+
+    $loginFailed = false;
+    if ($userId != -1) {
+        setcookie('user_id', $id, time() + 3600, '/');
+        header('Location: setlists.php');
+    } else {
+        $loginFailed = true;
+    }
 }
 
 ?>
@@ -28,19 +39,12 @@ if (!empty($_POST)) {
 </head>
 
 <body>
-    <div class="login-container">
-        <?php
-        if (!empty($_POST))
-        {
-        ?>
-            <span class="user-created-msg">
-                <?= $userCreatedMsg ?>
-            </span>
-        <?php
-        }
-        ?>
+    <div class="login-container">     
         <h2>Setlist Tracker</h2>
-        <form action="setlists.php" method="post">
+        <span class="user-created-msg">
+            <?= $loginFailed ? "Registration Unsuccessful." : "" ?>
+        </span>
+        <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
             <input name="username" class="text-input" type="text" placeholder="Username" required="true">
             <input name="password" class="text-input" type="password" placeholder="Password" required="true">
             <div class="remember-checkbox"><label><input type="checkbox" /> Remember me</label></div>

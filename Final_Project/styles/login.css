@@ -64,3 +64,8 @@ input:focus {
 .login-container button:hover {
     background-color: #0d7b39;
 }
+
+.user-created-msg {
+    display: inline-block;
+    margin-bottom: 10px;
+}
