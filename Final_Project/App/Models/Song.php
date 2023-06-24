@@ -96,13 +96,12 @@ class Song {
         $stmt = mysqli_prepare($conn, $sql);
         
         mysqli_stmt_bind_param($stmt, 'issssiss', $user_id, $song_title, $artists, $tempo, $song_key, $original_key, $link, $notes);
-        if ( mysqli_stmt_execute($stmt)) {
+        if (mysqli_stmt_execute($stmt)) {
             $songId = mysqli_stmt_insert_id($stmt);
             mysqli_stmt_close($stmt);
             $conn->close();
             return $songId;
         } else {
-            echo "Error: " . mysqli_error($conn);
             return false;
         }
     }

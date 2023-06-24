@@ -1,7 +1,14 @@
 <?php
-// Includes
-include 'includes/sql_lib.php';
+include 'App/Models/User.php';
+use \App\Models\User;
 
+// If there is a cookie for current user, decode the JSON into a User object
+// to be used for actions in the application.
+if (isset($_COOKIE['currentUser']))
+{
+    $currentUser = new User();
+    $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

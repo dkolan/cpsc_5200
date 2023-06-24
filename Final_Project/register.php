@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $registrationFailed = false;
     if ($userId) {
-        setcookie('user_id', $id, time() + 3600, '/');
         header('Location: login.php');
     } else {
         $registrationFailed = true;

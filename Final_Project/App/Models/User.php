@@ -1,14 +1,39 @@
 <?php
 namespace App\Models;
+use Serializable;
 
 require 'includes/sql_lib.php';
 
-class User {
+class User implements Serializable {
     private $id;
     private $email;
     private $username;
     private $password;
     private $date_created;
+
+    public function serialize() {
+        $encode = json_encode(array(
+            'id' => $this->id,
+            'email' => $this->email,
+            'username' => $this->username,
+            'password' => -1,
+            'date_created' => $this->date_created
+        ));
+        
+        return $encode;
+    }
+    
+    public function unserialize($data) {
+        $values = json_decode($data, true);
+        $this->id = $values['id'];
+        $this->email = $values['email'];
+        $this->username = $values['username'];
+        $this->password = $values['password'];
+        $this->date_created = $values['date_created'];
+    
+        return $this;
+    }
+    
     
     public function getId() {
         return $this->id;
@@ -28,6 +53,10 @@ class User {
     
     public function getDateCreated() {
         return $this->date_created;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
     }
     
     public function setEmail($email) {
@@ -79,8 +108,29 @@ class User {
         }
     }
     
-    public function getUser($id) {
-
+    public function getUserById($id) {
+        $conn = createConnection();
+    
+        $sql = "SELECT id, email, username, date_created FROM st_users WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+    
+        if(mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_bind_result($stmt, $userId, $userEmail, $userName, $userDateCreated);
+            mysqli_stmt_fetch($stmt);
+            mysqli_stmt_close($stmt);
+            $conn->close();
+    
+            $retrievedUser = new User();
+            $retrievedUser->setId($userId);
+            $retrievedUser->setEmail($userEmail);
+            $retrievedUser->setUsername($userName);
+            $retrievedUser->setDateCreated($userDateCreated);
+    
+            return $retrievedUser;
+        } else {
+            return false;
+        }
     }
     
     public function updateUser() {
@@ -108,7 +158,7 @@ class User {
         if ($enteredHash === $storedHash) {
             $stmt->close();
             $conn->close();
-            return $id;
+            return intval($id);
         } else {
             $stmt->close();
             $conn->close();

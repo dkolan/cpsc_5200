@@ -133,6 +133,7 @@ body {
 .form-container button {
     width: 100%;
     margin-top: 25px;
+    padding: 10px;
     background-color: #0C8E41;
     font-size: 1.5rem;
     color: #FFFFFF;

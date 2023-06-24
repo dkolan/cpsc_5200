@@ -6,7 +6,9 @@ use \App\Controllers\UserController;
 use \App\Models\User;
 
 $userController = new UserController();
-
+// If the request on this page is a POST, grab the form data and auth the user.
+// If the user is successfully authenticated, set the user's data (JSON),
+// and store it as a cookie (which only accepts primitives, hence JSON), and go to setlists.php.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -19,13 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $loginFailed = false;
     if ($userId != -1) {
-        setcookie('user_id', $id, time() + 3600, '/');
+        $currentUser = new User();
+        $currentUser = $userController->getUserById($userId);
+        $serializedUser = $currentUser->serialize();
+        setcookie('currentUser', $serializedUser, time() + 3600, '/');
         header('Location: setlists.php');
     } else {
         $loginFailed = true;
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -53,5 +57,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="register.php">Register for an account.</a>
     </div>
 </body>
-
 </html>

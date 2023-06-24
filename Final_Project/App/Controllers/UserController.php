@@ -25,9 +25,12 @@ class UserController
         // TODO
     }
 
-    public function read($id)
+    public function getUserById($id)
     {
-        // TODO
+        $userObj = new User();
+        $userJSON = $userObj->getUserById($id);
+        // var_dump($userObj);
+        return $userJSON;
     }
 
     public function authUser(User $user)
@@ -36,6 +39,6 @@ class UserController
             $user->getUsername(),
             $user->getPassword());
 
-        return $userId;
+        return intval($userId);
     }
 }
