@@ -48,7 +48,9 @@ body {
 }
 
 .form-container {
-    width: 25%;
+    width: 80%;
+    max-width: 480px;
+    margin: 0 auto;
 }
 
 .centered-text {
@@ -132,7 +134,7 @@ body {
 
 .form-container button {
     width: 100%;
-    margin-top: 25px;
+    margin-top: 10px;
     padding: 10px;
     background-color: #0C8E41;
     font-size: 1.5rem;

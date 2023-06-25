@@ -2,8 +2,16 @@
 // Includes
 include 'App/Controllers/SongController.php';
 include 'App/Models/Song.php';
+include 'App/Models/User.php';
+use \App\Models\User;
 use \App\Controllers\SongController;
 use \App\Models\Song;
+
+if (isset($_COOKIE['currentUser']))
+{
+    $currentUser = new User();
+    $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
+}
 
 $songController = new SongController();
 
@@ -12,16 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $artists = $_POST['artist'];
     $tempo = $_POST['tempo'];
     $songKey = $_POST['key'];
+    $songMode = strcasecmp($_POST['mode'], "major") == 0 ? 0 : 1;
     $originalKey = isset($_POST['original-key']) ? true : false;
     $link = $_POST['link'];
     $notes = $_POST['notes'];
 
     $song = new Song();
-    $song->setUserId($_COOKIE['user_id']);
+    $song->setUserId($currentUser->getId());
     $song->setSongTitle($songTitle);
     $song->setArtists($artists);
     $song->setTempo($tempo);
     $song->setSongKey($songKey);
+    $song->setMode($songMode);
     $song->setOriginalKey($originalKey);
     $song->setLink($link);
     $song->setNotes($notes);
@@ -79,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group-inline">
-                    <div class="form-group half-width">
+                    <div class="form-group quarter-width">
                         <label for="tempo">Tempo</label>
                         <input type="number" id="tempo" name="tempo">
                     </div>
@@ -103,7 +113,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="form-group quarter-width">
-                        <label for="original-key">Original Key</label>
+                        <label for="original-key">Mode</label>
+                        <select id="mode" name="mode">
+                            <option value="major">Major</option>
+                            <option value="minor">Minor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group quarter-width">
+                        <label for="original-key">Original Key?</label>
                         <input type="checkbox" id="original-key" name="original-key">
                     </div>
                 </div>
@@ -117,11 +135,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="notes">Notes</label>
                     <textarea id="notes" name="notes" rows="10"></textarea>
                 </div>
-
+<!-- 
                 <div class="form-group-inline centered-text">
                     <label class="centered-text" for="add-to-my-songs">Add to my songs</label>
                     <input type="checkbox" id="add-to-my-songs" name="add-to-my-songs">
-                </div>
+                </div> -->
 
 
                 <div class="form-group full-width add-song-button">

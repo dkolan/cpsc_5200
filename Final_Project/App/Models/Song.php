@@ -3,7 +3,7 @@ namespace App\Models;
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include 'includes/sql_lib.php';
+require_once 'includes/sql_lib.php';
 
 class Song {
     private $id;
@@ -12,6 +12,7 @@ class Song {
     private $artists;
     private $tempo;
     private $songKey;
+    private $mode;
     private $originalKey;
     private $link;
     private $notes;
@@ -64,6 +65,14 @@ class Song {
         $this->songKey = $songKey;
     }
 
+    public function getMode() {
+        return $this->mode;
+    }
+
+    public function setMode($mode) {
+        $this->mode = $mode;
+    }
+
     public function getOriginalKey() {
         return $this->originalKey;
     }
@@ -88,14 +97,14 @@ class Song {
         $this->notes = $notes;
     }
 
-    function createSong($user_id, $song_title, $artists, $tempo, $song_key, $original_key, $link, $notes) {
+    function createSong($user_id, $song_title, $artists, $tempo, $song_key, $mode, $original_key, $link, $notes) {
         $conn = createConnection();
 
-        $sql = "INSERT INTO st_songs (user_id, song_title, artists, tempo, song_key, original_key, link, notes) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO st_songs (user_id, song_title, artists, tempo, song_key, mode, original_key, link, notes) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
         
-        mysqli_stmt_bind_param($stmt, 'issssiss', $user_id, $song_title, $artists, $tempo, $song_key, $original_key, $link, $notes);
+        mysqli_stmt_bind_param($stmt, 'issssiiss', $user_id, $song_title, $artists, $tempo, $song_key, $mode, $original_key, $link, $notes);
         if (mysqli_stmt_execute($stmt)) {
             $songId = mysqli_stmt_insert_id($stmt);
             mysqli_stmt_close($stmt);

@@ -2,7 +2,7 @@
 namespace App\Models;
 use Serializable;
 
-require 'includes/sql_lib.php';
+require_once 'includes/sql_lib.php';
 
 class User implements Serializable {
     private $id;
