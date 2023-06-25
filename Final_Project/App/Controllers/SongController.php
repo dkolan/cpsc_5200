@@ -18,7 +18,7 @@ class SongController
             $songId = $song->createSong(
                 $song->getUserId(),
                 $song->getSongTitle(),
-                $song->getArtists(),
+                $song->getArtist(),
                 $song->getTempo(),
                 $song->getSongKey(),
                 $song->getMode(),
@@ -26,6 +26,7 @@ class SongController
                 $song->getLink(),
                 $song->getNotes()
             );
+            $songId;
             return $songId;
         } else {
             return false;

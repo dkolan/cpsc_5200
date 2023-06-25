@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 // Includes
 include 'App/Controllers/SongController.php';
 include 'App/Models/Song.php';
@@ -7,12 +9,25 @@ use \App\Models\User;
 use \App\Controllers\SongController;
 use \App\Models\Song;
 
-if (isset($_COOKIE['currentUser']))
+// Check for currentUser data to use for song creation
+// If cookie is not set, wipe all cookies, set as blank and redirect.
+if (!isset($_COOKIE['currentUser']))
+{
+    foreach ($_COOKIE as $key => $value)
+    {
+        unset($_COOKIE[$key]);
+        setcookie($key, "", time() - 1, "/");
+    }
+    header('Location: login.php');
+} else
 {
     $currentUser = new User();
     $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
 }
 
+// Create song controller to send data upstream
+// If this page make a POST, extract the fields from the POST
+// make a Song obj, set the fields, send upstream to DB
 $songController = new SongController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -28,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $song = new Song();
     $song->setUserId($currentUser->getId());
     $song->setSongTitle($songTitle);
-    $song->setArtists($artists);
+    $song->setArtist($artists);
     $song->setTempo($tempo);
     $song->setSongKey($songKey);
     $song->setMode($songMode);
@@ -36,9 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $song->setLink($link);
     $song->setNotes($notes);
 
+    // var_dump($song);
     $songId = $songController->create($song);
 
+    // If the song is created, 
+    $songCreated = false;
     if ($songId) {
+        $songTitleArtistString = $song->getSongTitle() . " by " . $song->getArtist();
+        $songCreated = true;
     } else {
     }
 }
@@ -80,12 +100,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
                 <div class="form-group full-width">
                     <label for="song-title">Song Title</label>
-                    <input type="text" id="song-title" name="song-title">
+                    <input type="text" id="song-title" name="song-title" required="true">
                 </div>
 
                 <div class="form-group full-width">
                     <label for="artist">Artist</label>
-                    <input type="text" id="artist" name="artist">
+                    <input type="text" id="artist" name="artist" required="true">
                 </div>
 
                 <div class="form-group-inline">
@@ -135,12 +155,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="notes">Notes</label>
                     <textarea id="notes" name="notes" rows="10"></textarea>
                 </div>
-<!-- 
+
+                <!-- 
                 <div class="form-group-inline centered-text">
                     <label class="centered-text" for="add-to-my-songs">Add to my songs</label>
                     <input type="checkbox" id="add-to-my-songs" name="add-to-my-songs">
-                </div> -->
+                </div> 
+                -->
 
+                <div class="form-group-inline centered-text">
+                    <?= isset($songId) ? $songCreated ? $songTitleArtistString . " added." : "Song not created." : "" ?>
+                </div>
 
                 <div class="form-group full-width add-song-button">
                     <button type="submit">Add Song</button>

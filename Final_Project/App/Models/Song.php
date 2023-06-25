@@ -10,12 +10,12 @@ class Song {
     private $userId;
     private $songTitle;
     private $artists;
-    private $tempo;
+    private $tempo; // Nullable
     private $songKey;
     private $mode;
     private $originalKey;
-    private $link;
-    private $notes;
+    private $link; // Nullable
+    private $notes; // Nullable
 
     public function getId() {
         return $this->id;
@@ -41,11 +41,11 @@ class Song {
         $this->songTitle = $songTitle;
     }
 
-    public function getArtists() {
+    public function getArtist() {
         return $this->artists;
     }
 
-    public function setArtists($artists) {
+    public function setArtist($artists) {
         $this->artists = $artists;
     }
 
@@ -53,8 +53,13 @@ class Song {
         return $this->tempo;
     }
 
+    // Allow for empty tempo field in new-song.php
     public function setTempo($tempo) {
-        $this->tempo = $tempo;
+        if (is_numeric($tempo)) {
+            $this->tempo = $tempo;
+        } else {
+            $this->tempo = null;
+        }
     }
 
     public function getSongKey() {
@@ -86,7 +91,11 @@ class Song {
     }
 
     public function setLink($link) {
-        $this->link = $link;
+        if (!empty($link)) {
+            $this->link = $link;
+        } else {
+            $this->link = null;
+        }
     }
 
     public function getNotes() {
@@ -94,7 +103,11 @@ class Song {
     }
 
     public function setNotes($notes) {
-        $this->notes = $notes;
+        if (!empty($notes)) {
+            $this->notes = $notes;
+        } else {
+            $this->notes = null;
+        }
     }
 
     function createSong($user_id, $song_title, $artists, $tempo, $song_key, $mode, $original_key, $link, $notes) {
@@ -111,6 +124,7 @@ class Song {
             $conn->close();
             return $songId;
         } else {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
             return false;
         }
     }

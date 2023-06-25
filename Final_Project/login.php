@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">     
         <h2>Setlist Tracker</h2>
         <span class="user-created-msg">
-            <?= $loginFailed ? "Registration Unsuccessful." : "" ?>
+            <?= $loginFailed ? "Login Unsuccessful." : "" ?>
         </span>
         <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
             <input name="username" class="text-input" type="text" placeholder="Username" required="true">
