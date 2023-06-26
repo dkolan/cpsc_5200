@@ -22,7 +22,7 @@ if (!isset($_COOKIE['currentUser']))
 } else
 {
     $currentUser = new User();
-    $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
+    $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
 }
 
 // Create song controller to send data upstream

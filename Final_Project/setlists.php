@@ -28,7 +28,7 @@ if (isset($_COOKIE['currentUser']))
                     <a class="menu-link" href="setlists.php">Setlists Home</a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="#">New Setlist</a>
+                    <a class="menu-link" href="new-setlist.php">New Setlist</a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="new-song.php">New Song</a>
