@@ -75,19 +75,57 @@ class Setlist {
 		return $this;
 	}
 
-    function createSetlist($user_id, $name, $city, $state, $date, $type) {
+    function createSetlist($user_id, $name, $city, $state, $setlist_date, $setlist_type) {
         $conn = createConnection();
 
-        $sql = "INSERT INTO st_setlists (user_id, name, city, state, date, type) 
-                VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO st_setlists (user_id, name, city, state, setlist_date, setlist_type, date_created) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
-        
-        mysqli_stmt_bind_param($stmt, 'isssss', $user_id, $name, $city, $state, $date, $type);
+
+        $currentDate = date('Y-m-d H:i:s');
+        mysqli_stmt_bind_param($stmt, 'issssss', $user_id, $name, $city, $state, $setlist_date, $setlist_type, $currentDate);
         if (mysqli_stmt_execute($stmt)) {
             $setlistId = mysqli_stmt_insert_id($stmt);
             mysqli_stmt_close($stmt);
             $conn->close();
             return $setlistId;
+        } else {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
+
+    function getSetlists($user_id) 
+	{
+        $conn = createConnection();
+
+        $sql = "SELECT name, city, state, setlist_date, setlist_type from st_setlists WHERE user_id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $user_id);
+
+        if (mysqli_stmt_execute($stmt)) 
+		{
+            mysqli_stmt_bind_result($stmt, $name, $city, $setlist_date, $setlist_type);
+
+			$setlists = array();
+
+			$retrievedSetlist = new Setlist();
+			while(mysqli_stmt_fetch($stmt))
+			{
+				$retrievedSetlist->setName($name);
+				$retrievedSetlist->setCity($city);
+				$retrievedSetlist->setDate($setlist_date);
+				$retrievedSetlist->setType($setlist_type);
+
+				$setlists[] = $retrievedSetlist;
+			}
+
+			mysqli_stmt_fetch($stmt);
+            mysqli_stmt_close($stmt);
+            $conn->close();
+
+			return $setlists;
+
         } else {
             // die('Query error: ' . mysqli_error($conn)); // Debug statement
             return false;

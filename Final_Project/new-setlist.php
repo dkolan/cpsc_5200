@@ -34,11 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['setlist-name'];
     $city = $_POST['setlist-city'];
     $state = $_POST['setlist-state'];
-    $setlistDate = $_POST['setlist-date'];
+    $setlistDate = date('Y-m-d', strtotime($_POST['setlist-date']));
     $setlistType = $_POST['setlist-type'];
 
     $setlist = new Setlist();
     $setlist->setuserId($currentUser->getId());
+    $setlist->setName($name);
     $setlist->setCity($city);
     $setlist->setState($state);
     $setlist->setDate($setlistDate);

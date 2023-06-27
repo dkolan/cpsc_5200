@@ -160,3 +160,8 @@ body {
     display: inline-block;
     margin-bottom: 10px;
 }
+
+.table-container {
+    display: flex;
+    justify-content: center;
+}
