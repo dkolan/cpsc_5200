@@ -15,7 +15,6 @@ if (isset($_COOKIE['currentUser']))
 }
 $setlistController = new SetlistController();
 $setlists = $setlistController->getSetlists($currentUser->getId());
-// var_dump($setlists);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,8 +22,8 @@ $setlists = $setlistController->getSetlists($currentUser->getId());
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <link href="styles/main.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Setlist Manager</title>
 </head>
 
@@ -49,30 +48,28 @@ $setlists = $setlistController->getSetlists($currentUser->getId());
         </nav>
     </div>
     <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Setlists</h2>
-    <div class="pure-g">
-        <div class="pure-u-1-3"></div>
-        <div class="table-container pure-u-1-3">
-            <div class="table-responsive">
-                <table class="pure-table-bordered pure-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Date</th>
-                            <th>Event Type</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        <div class="pure-u-1-3"></div>
+    
+    <div class="setlist">
+        <div class="setlist-row setlist-header">
+            <div class="setlist-field">Name</div>
+            <div class="setlist-field">Location</div>
+            <div class="setlist-field">Date</div>
+            <div class="setlist-field">Event Type</div>
+            <i id="hidden" class="chevron-right fas fa-chevron-right"></i>  
+</div>
+        <?php
+            foreach ($setlists as $setlist)
+            {
+        ?>      <a class="setlist-row">
+                    <div class="setlist-field"><?= $setlist->getName() ?></div>
+                    <div class="setlist-field"><?= $setlist->getCity() . ", " . $setlist->getState() ?></div>
+                    <div class="setlist-field"><?= $setlist->getDate() ?></div>
+                    <div class="setlist-field"><?= $setlist->getType() ?></div>
+                    <i class="chevron-right fas fa-chevron-right"></i>
+                </a>
+        <?php
+            }
+        ?>
     </div>
-<!--     
-    <div class="header">
-        <div class="field">Name</div>
-        <div class="field">Location</div>
-        <div class="field">Date</div>
-        <div class="field">Event Type</div>
-    </div> -->
 </body>
 </html>

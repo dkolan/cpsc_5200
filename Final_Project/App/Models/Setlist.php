@@ -105,15 +105,16 @@ class Setlist {
 
         if (mysqli_stmt_execute($stmt)) 
 		{
-            mysqli_stmt_bind_result($stmt, $name, $city, $setlist_date, $setlist_type);
+            mysqli_stmt_bind_result($stmt, $name, $city, $state, $setlist_date, $setlist_type);
 
 			$setlists = array();
 
-			$retrievedSetlist = new Setlist();
 			while(mysqli_stmt_fetch($stmt))
 			{
+				$retrievedSetlist = new Setlist();
 				$retrievedSetlist->setName($name);
 				$retrievedSetlist->setCity($city);
+				$retrievedSetlist->setState($state);
 				$retrievedSetlist->setDate($setlist_date);
 				$retrievedSetlist->setType($setlist_type);
 
