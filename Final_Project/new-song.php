@@ -74,26 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <div class="menu-container">
-        <nav class="menu">
-            <ul class="menu-nav">
-                <li class="menu-item">
-                    <a class="menu-link" href="setlists.php">Setlists Home</a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="#">New Setlist</a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="new-song.php">New Song</a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="#">All Songs</a>
-                </li>
-            </ul>
-            <a class="menu-link ml-auto" href="#">Log Out</a>
-        </nav>
-    </div>
-
+    <?php include 'nav-bar.html'; ?>
     <div class="add-song-container">
         <div class="form-container">
             <h2 class="centered-text form-title">Add/Edit Song</h2>

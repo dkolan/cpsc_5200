@@ -43,8 +43,21 @@ class SongController
         // TODO
     }
 
-    public function read($id)
+    public function getSongsById($user_id)
     {
-        // TODO
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $song = new Song();
+            $songs = array();
+
+            // $currentUser = new User();
+            // $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
+
+            $songs = $song->getSongsByUserId($user_id);
+
+            return $songs;
+        } else {
+            return false;
+        }
     }
 }

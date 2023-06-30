@@ -110,19 +110,60 @@ class Song {
         }
     }
 
-    function createSong($user_id, $song_title, $artists, $tempo, $song_key, $mode, $original_key, $link, $notes) {
+    function createSong($user_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes) {
         $conn = createConnection();
 
-        $sql = "INSERT INTO st_songs (user_id, song_title, artists, tempo, song_key, mode, original_key, link, notes) 
+        $sql = "INSERT INTO st_songs (user_id, song_title, artist, tempo, song_key, mode, original_key, link, notes) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
-        
-        mysqli_stmt_bind_param($stmt, 'issssiiss', $user_id, $song_title, $artists, $tempo, $song_key, $mode, $original_key, $link, $notes);
+
+        mysqli_stmt_bind_param($stmt, 'issisiiss', $user_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes);
         if (mysqli_stmt_execute($stmt)) {
             $songId = mysqli_stmt_insert_id($stmt);
             mysqli_stmt_close($stmt);
             $conn->close();
             return $songId;
+        } else {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
+
+    function getSongsByUserId($user_id) 
+	{
+        $conn = createConnection();
+
+        $sql = "SELECT id, song_title, artist, tempo, song_key, mode, original_key, link, notes from st_songs WHERE user_id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $user_id);
+
+        if (mysqli_stmt_execute($stmt)) 
+		{
+            mysqli_stmt_bind_result($stmt, $song_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes);
+
+			$songs = array();
+
+			while(mysqli_stmt_fetch($stmt))
+			{
+				$song = new Song();
+				$song->setId($song_id);
+				$song->setSongTitle($song_title);
+				$song->setArtist($artist);
+				$song->setTempo($tempo);
+				$song->setSongKey($song_key);
+				$song->setMode($mode);
+				$song->setOriginalKey($original_key);
+				$song->setLink($link);
+				$song->setNotes($notes);
+
+				$songs[] = $song;
+			}
+
+            mysqli_stmt_close($stmt);
+            $conn->close();
+
+			return $songs;
+
         } else {
             // die('Query error: ' . mysqli_error($conn)); // Debug statement
             return false;

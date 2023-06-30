@@ -15,6 +15,7 @@ if (isset($_COOKIE['currentUser']))
 }
 $setlistController = new SetlistController();
 $setlists = $setlistController->getSetlists($currentUser->getId());
+var_dump($setlists)
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,25 +29,7 @@ $setlists = $setlistController->getSetlists($currentUser->getId());
 </head>
 
 <body>
-    <div class="menu-container">
-        <nav class="menu">
-            <ul class="menu-nav">
-                <li class="menu-item">
-                    <a class="menu-link" href="setlists.php">Setlists Home</a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="new-setlist.php">New Setlist</a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="new-song.php">New Song</a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="#">All Songs</a>
-                </li>
-            </ul>
-            <a class="menu-link ml-auto" href="#">Log Out</a>
-        </nav>
-    </div>
+    <?php include 'nav-bar.html'; ?>
     <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Setlists</h2>
     
     <div class="setlist">

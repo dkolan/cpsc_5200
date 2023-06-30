@@ -167,7 +167,7 @@ body {
     justify-content: center;
 }
 
-.setlist {
+.setlist, .songs {
     width: 50%;
     margin: auto;
 }
@@ -204,3 +204,27 @@ a.setlist-row:hover {
 #hidden {
     visibility: hidden;
 }
+
+div.songs table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    display: table;
+}
+
+div.songs table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+div.songs table tr th,
+div.songs table tr td {
+    padding: 8px 8px;
+    padding-left: 8px;
+    display: table-cell;
+    text-align: center !important;
+    vertical-align: top;
+}
+
+div.songs table tr:nth-child(even) {
+    background-color: #dddddd;
+  }

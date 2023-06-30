@@ -121,7 +121,6 @@ class Setlist {
 				$setlists[] = $retrievedSetlist;
 			}
 
-			mysqli_stmt_fetch($stmt);
             mysqli_stmt_close($stmt);
             $conn->close();
 
