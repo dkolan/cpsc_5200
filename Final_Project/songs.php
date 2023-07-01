@@ -30,7 +30,7 @@ $songs = $songController->getSongsById($currentUser->getId());
 <body>
     <?php include 'nav-bar.html'; ?>
     <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Songs</h2>
-    <div class="songs">
+    <form class="songs" action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
         <table class="songs-table">
             <tr class="songs-table-row">
                 <th class="songs-table-header">Title</th>
@@ -58,10 +58,9 @@ $songs = $songController->getSongsById($currentUser->getId());
             }
             ?>
         </table>
-
-        <div class="form-group full-width create-setlist-button">
+        <div class="add-songs-button">
             <button type="submit">Add Songs to Setlist</button>
         </div>
-    </div>
+    </form>
 </body>
 </html>

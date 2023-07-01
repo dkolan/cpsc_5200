@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <?php include 'nav-bar.html'; ?>
-    <div class="add-song-container">
+
         <div class="form-container">
             <h2 class="centered-text form-title">Add/Edit Song</h2>
             <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </form>
         </div>
-    </div>
+
 </body>
 
 </html>

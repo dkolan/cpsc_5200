@@ -15,7 +15,6 @@ if (isset($_COOKIE['currentUser']))
 }
 $setlistController = new SetlistController();
 $setlists = $setlistController->getSetlists($currentUser->getId());
-var_dump($setlists)
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +31,7 @@ var_dump($setlists)
     <?php include 'nav-bar.html'; ?>
     <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Setlists</h2>
     
+    <form class="setlists" action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
     <div class="setlist">
         <div class="setlist-row setlist-header">
             <div class="setlist-field">Name</div>
@@ -39,20 +39,22 @@ var_dump($setlists)
             <div class="setlist-field">Date</div>
             <div class="setlist-field">Event Type</div>
             <i id="hidden" class="chevron-right fas fa-chevron-right"></i>  
-</div>
-        <?php
-            foreach ($setlists as $setlist)
-            {
-        ?>      <a class="setlist-row">
+    </div>
+            <?php
+                foreach ($setlists as $setlist)
+                {
+            ?>      
+                <button type="submit" class="setlist-row" name="setlistId" value="<?= $setlist->getId() ?>">
                     <div class="setlist-field"><?= $setlist->getName() ?></div>
                     <div class="setlist-field"><?= $setlist->getCity() . ", " . $setlist->getState() ?></div>
                     <div class="setlist-field"><?= $setlist->getDate() ?></div>
                     <div class="setlist-field"><?= $setlist->getType() ?></div>
                     <i class="chevron-right fas fa-chevron-right"></i>
-                </a>
-        <?php
-            }
-        ?>
+                </button>
+            <?php
+                }
+            ?>
+        </form>
     </div>
 </body>
 </html>

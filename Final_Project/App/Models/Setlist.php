@@ -99,19 +99,21 @@ class Setlist {
 	{
         $conn = createConnection();
 
-        $sql = "SELECT name, city, state, setlist_date, setlist_type from st_setlists WHERE user_id = ?";
+        $sql = "SELECT id, user_id, name, city, state, setlist_date, setlist_type from st_setlists WHERE user_id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, 'i', $user_id);
 
         if (mysqli_stmt_execute($stmt)) 
 		{
-            mysqli_stmt_bind_result($stmt, $name, $city, $state, $setlist_date, $setlist_type);
+            mysqli_stmt_bind_result($stmt, $setlist_id, $setlist_user, $name, $city, $state, $setlist_date, $setlist_type);
 
 			$setlists = array();
 
 			while(mysqli_stmt_fetch($stmt))
 			{
 				$retrievedSetlist = new Setlist();
+				$retrievedSetlist->setId($setlist_id);
+				$retrievedSetlist->setUserId($setlist_user);
 				$retrievedSetlist->setName($name);
 				$retrievedSetlist->setCity($city);
 				$retrievedSetlist->setState($state);
