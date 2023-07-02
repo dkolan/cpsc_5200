@@ -2,8 +2,13 @@
 include 'App/Controllers/SongController.php';
 include 'App/Models/Song.php';
 include 'App/Models/User.php';
-use App\Controllers\SongController;
+include 'App/Controllers/SetlistController.php';
+include 'App/Models/Setlist.php';
+use \App\Controllers\SetlistController;
+use \App\Models\Setlist;
 use \App\Models\User;
+use App\Controllers\SongController;
+
 
 // If there is a cookie for current user, decode the JSON into a User object
 // to be used for actions in the application.
@@ -14,7 +19,26 @@ if (isset($_COOKIE['currentUser']))
 }
 $songController = new SongController();
 $songs = $songController->getSongsById($currentUser->getId());
-// var_dump($songs);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['song_id'])) {
+        $songIds = array_values($_POST['song_id']);
+        var_dump($songIds);
+
+    } else {
+
+    }
+    // If we have a setlist ID, we will add songs to the setlist
+    if (isset($_POST['setlist_id'])) {
+        $setlistController = new SetlistController();
+        $setlist = $setlistController->getSetlistById(intval($_POST['setlist_id']));
+
+    } else {
+
+    }
+
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +54,13 @@ $songs = $songController->getSongsById($currentUser->getId());
 <body>
     <?php include 'nav-bar.html'; ?>
     <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Songs</h2>
+
+    <?php if (isset($_POST['setlist_id'])) { ?>
+        <h3 class="centered-text form-title">
+            Adding Songs to Setlist: <?= $setlist->getName() ?> (<?= date('F d, Y', strtotime($setlist->getDate())) ?>)
+        </h3>
+    <?php } ?>
+
     <form class="songs" action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
         <table class="songs-table">
             <tr class="songs-table-row">
@@ -51,7 +82,7 @@ $songs = $songController->getSongsById($currentUser->getId());
                 <td class="songs-table-field"><?= $song->getSongKey() . " " . (($song->getMode() == 0) ? "Major" : "Minor") ?></td>
                 <td class="songs-table-field songs-table-centered"><?= ($song->getOriginalKey() == 1) ? "X" : "" ?></td>
                 <td class="songs-table-header songs-table-centered">
-                    <input type="checkbox" id="song-id" name="<?= $song->getId() ?>" value="song-id">
+                    <input type="checkbox" id="song-id" name="song_id[]" value="<?= $song->getId() ?>">
                 </td>
             </tr>
             <?php

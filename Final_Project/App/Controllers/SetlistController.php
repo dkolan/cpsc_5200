@@ -52,12 +52,24 @@ class SetlistController
             $setlist = new Setlist();
             $setlists = array();
 
-            // $currentUser = new User();
-            // $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
-
             $setlists = $setlist->getSetlists($userId);
 
             return $setlists;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function getSetlistById($setlist_id)
+    {
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $setlist = new Setlist();
+
+            $setlist = $setlist->getSetlistById($setlist_id);
+
+            return $setlist;
         } else {
             return false;
         }

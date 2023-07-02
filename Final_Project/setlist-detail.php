@@ -15,6 +15,17 @@ if (isset($_COOKIE['currentUser']))
 }
 $setlistController = new SetlistController();
 $setlists = $setlistController->getSetlists($currentUser->getId());
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the setlist associated with the id
+    $setlist = $setlistController->getSetlistById(intval($_POST['setlist_id']));
+    
+    // var_dump($setlist);
+
+    if ($setlist) {
+
+    } else {
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,32 +40,38 @@ $setlists = $setlistController->getSetlists($currentUser->getId());
 
 <body>
     <?php include 'nav-bar.html'; ?>
-    <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Setlists</h2>
+    <h2 class="centered-text form-title"><?= $setlist->getName() ?> Setlist</h2>
+    <h3 class="centered-text form-title"><?= date('F d, Y', strtotime($setlist->getDate())) ?></h3>
+
+    <form class="songs" action="songs.php" method="post">
+        <div class="add-songs-button">
+            <button type="submit" name="setlist_id" value="<?= $setlist->getId() ?>">
+                Add Songs to Setlist
+            </button>
+        </div>
+    </form>
     
-    <form class="setlists" action="setlist-detail.php" method="post">
-        <div class="setlist">
-            <div class="setlist-row setlist-header">
-                <div class="setlist-field">Name</div>
-                <div class="setlist-field">Location</div>
-                <div class="setlist-field">Date</div>
-                <div class="setlist-field">Event Type</div>
-                <i id="hidden" class="chevron-right fas fa-chevron-right"></i>  
-            </div>
-            <?php
-                foreach ($setlists as $setlist)
-                {
-            ?>      
-                <button type="submit" class="setlist-row" name="setlist_id" value="<?= $setlist->getId() ?>">
+    <!-- <div class="setlist">
+        <div class="setlist-row setlist-header">
+            <div class="setlist-field">Name</div>
+            <div class="setlist-field">Location</div>
+            <div class="setlist-field">Date</div>
+            <div class="setlist-field">Event Type</div>
+            <i id="hidden" class="chevron-right fas fa-chevron-right"></i>  
+    </div>
+        <?php
+            foreach ($setlists as $setlist)
+            {
+        ?>      <a class="setlist-row">
                     <div class="setlist-field"><?= $setlist->getName() ?></div>
                     <div class="setlist-field"><?= $setlist->getCity() . ", " . $setlist->getState() ?></div>
                     <div class="setlist-field"><?= $setlist->getDate() ?></div>
                     <div class="setlist-field"><?= $setlist->getType() ?></div>
                     <i class="chevron-right fas fa-chevron-right"></i>
-                </button>
-            <?php
-                }
-            ?>
-        </div>
-    </form>
+                </a>
+        <?php
+            }
+        ?>
+    </div> -->
 </body>
 </html>

@@ -133,4 +133,37 @@ class Setlist {
             return false;
         }
     }
+	
+    function getSetlistById($setlist_id) 
+	{
+        $conn = createConnection();
+
+        $sql = "SELECT user_id, name, city, state, setlist_date, setlist_type from st_setlists WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $setlist_id);
+
+        if (mysqli_stmt_execute($stmt)) 
+		{
+            mysqli_stmt_bind_result($stmt, $setlist_user, $name, $city, $state, $setlist_date, $setlist_type);
+			mysqli_stmt_fetch($stmt);
+
+			$retrievedSetlist = new Setlist();
+			$retrievedSetlist->setId($setlist_id);
+			$retrievedSetlist->setUserId($setlist_user);
+			$retrievedSetlist->setName($name);
+			$retrievedSetlist->setCity($city);
+			$retrievedSetlist->setState($state);
+			$retrievedSetlist->setDate($setlist_date);
+			$retrievedSetlist->setType($setlist_type);
+
+            mysqli_stmt_close($stmt);
+            $conn->close();
+
+			return $retrievedSetlist;
+
+        } else {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
 }
