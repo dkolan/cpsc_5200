@@ -10,7 +10,6 @@ class SetlistController
     {
         // Basic check for set cookie -- probably need to verify with DB
         // Checking to prevent potential malicious writes to DB
-        // Not working because the cookie stays set why can't we use SESSION?
         if (isset($_COOKIE['currentUser']))
         { 
             $currentUser = new User();
@@ -27,7 +26,6 @@ class SetlistController
         } else {
             return false;
         }
-
     }
 
     public function update($id)
@@ -74,5 +72,39 @@ class SetlistController
             return false;
         }
 
+    }
+
+    public function addSongToSetlist($setlist_id, $song_ids_arr)
+    {
+        // Basic check for set cookie -- probably need to verify with DB
+        // Checking to prevent potential malicious writes to DB
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $setlist = new Setlist();
+            $setlist->setId($setlist_id);
+            $setlist_song_ids = array();
+            foreach ($song_ids_arr as $song_id)
+            {
+                $setlist_song_ids[] = $setlist->addSongToSetlist($setlist_id, $song_id);
+            }
+            return $setlist_song_ids;
+        } else {
+            return false;
+        }
+    }
+
+    public function getSongIdsInSetlist($setlist_id)
+    {
+        // Basic check for set cookie -- probably need to verify with DB
+        // Checking to prevent potential malicious writes to DB
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $setlist = new Setlist();
+            $setlist->setId($setlist_id);
+            $setlistSongIds = $setlist->getSongIdsInSetlist($setlist_id);
+            return $setlistSongIds;
+        } else {
+            return false;
+        }
     }
 }

@@ -9,7 +9,6 @@ use \App\Models\Setlist;
 use \App\Models\User;
 use App\Controllers\SongController;
 
-
 // If there is a cookie for current user, decode the JSON into a User object
 // to be used for actions in the application.
 if (isset($_COOKIE['currentUser']))
@@ -20,25 +19,29 @@ if (isset($_COOKIE['currentUser']))
 $songController = new SongController();
 $songs = $songController->getSongsById($currentUser->getId());
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['song_id'])) {
-        $songIds = array_values($_POST['song_id']);
-        var_dump($songIds);
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
+    // If POST contains both at least a song_id and setlist_id, we'll associate songs with a setlist
+    if (isset($_POST['song_id']) && isset($_POST['setlist_id']))
+    {
+        // $songIds = array_values($_POST['song_id']);
+        // var_dump($songIds);
 
-    } else {
+        $setlistController = new SetlistController();
+        $setlist_song_ids = $setlistController->addSongToSetlist($_POST['setlist_id'], $_POST['song_id']);
+        // var_dump($setlist_song_ids);
 
+    } else
+    {
     }
     // If we have a setlist ID, we will add songs to the setlist
     if (isset($_POST['setlist_id'])) {
         $setlistController = new SetlistController();
         $setlist = $setlistController->getSetlistById(intval($_POST['setlist_id']));
-
-    } else {
-
+    } else
+    {
     }
-
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,12 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <?php include 'nav-bar.html'; ?>
     <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Songs</h2>
-
-    <?php if (isset($_POST['setlist_id'])) { ?>
-        <h3 class="centered-text form-title">
-            Adding Songs to Setlist: <?= $setlist->getName() ?> (<?= date('F d, Y', strtotime($setlist->getDate())) ?>)
-        </h3>
-    <?php } ?>
+    <h3 class="centered-text form-title">
+        <?= isset($_POST['setlist_id']) ? $setlist->getName() . " (" . date('F d, Y', strtotime($setlist->getDate())) . ")" : "" ?>
+    </h3>
+    <h4 class="centered-text form-title">
+        <?= isset($setlist_song_ids) ? "Songs added to setlist." : "" ?>
+    </h4>
 
     <form class="songs" action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
         <table class="songs-table">
@@ -89,6 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             ?>
         </table>
+        <!-- No idea if this is a reasonable way to track the current setlist to add to... -->
+        <input type="hidden" name="setlist_id" value="<?= isset($_POST['setlist_id']) ? $_POST['setlist_id'] : '' ?>">
         <div class="add-songs-button">
             <button type="submit">Add Songs to Setlist</button>
         </div>

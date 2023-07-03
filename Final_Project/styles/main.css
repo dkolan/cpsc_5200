@@ -167,7 +167,8 @@ body {
     justify-content: center;
 }
 
-.setlist, .songs {
+.setlist,
+.songs {
     width: 50%;
     margin: auto;
 }
@@ -185,6 +186,37 @@ body {
     transition: all 0.3s ease;
 }
 
+.setlist-row summary {
+    outline: none;
+    cursor: pointer;
+}
+
+details>summary {
+    list-style: none;
+}
+
+details>summary::-webkit-details-marker {
+    display: none;
+}
+
+@keyframes rotateChevron {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(90deg);
+    }
+}
+
+.setlist-row[open] .chevron-right {
+    animation: rotateChevron 0.3s forwards;
+}
+
+.setlist-row:not([open]) .chevron-right {
+    animation: rotateChevron 0.3s reverse forwards;
+}
+
 button.setlist-row {
     width: 100%;
     text-align: left;
@@ -193,6 +225,12 @@ button.setlist-row {
 
 button.setlist-row:hover {
     transform: scale(1.05);
+}
+
+.setlist-fields {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .setlist-field {
@@ -235,7 +273,7 @@ button.setlist-row:hover {
 
 .songs table tr:nth-child(even) {
     background-color: #dddddd;
-  }
+}
 
 form.songs button {
     display: block;
@@ -254,3 +292,28 @@ form.songs button {
 form.songs button:hover {
     background-color: #0d7b39;
 }
+
+.song-detail-field-container {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.song-detail-field-title {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.song-detail-field-content a {
+    display: inline-block;
+  }
+
+  .song-detail-field-content p {
+    display:block;
+  }
+
+  .break {
+    flex-basis: 100%;
+    height: 0;
+  }

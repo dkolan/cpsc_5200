@@ -30,7 +30,8 @@ if (!isset($_COOKIE['currentUser']))
 // make a Song obj, set the fields, send upstream to DB
 $songController = new SongController();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
     $songTitle = $_POST['song-title'];
     $artists = $_POST['artist'];
     $tempo = $_POST['tempo'];
@@ -56,10 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // If the song is created, 
     $songCreated = false;
-    if ($songId) {
+    if ($songId)
+    {
         $songTitleArtistString = $song->getSongTitle() . " by " . $song->getArtist();
         $songCreated = true;
-    } else {
+    } else
+    {
     }
 }
 ?>
@@ -136,13 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="notes">Notes</label>
                     <textarea id="notes" name="notes" rows="10"></textarea>
                 </div>
-
-                <!-- 
-                <div class="form-group-inline centered-text">
-                    <label class="centered-text" for="add-to-my-songs">Add to my songs</label>
-                    <input type="checkbox" id="add-to-my-songs" name="add-to-my-songs">
-                </div> 
-                -->
 
                 <div class="form-group-inline centered-text">
                     <?= isset($songId) ? $songCreated ? $songTitleArtistString . " added." : "Song not created." : "" ?>

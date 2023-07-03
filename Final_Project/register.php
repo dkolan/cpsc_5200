@@ -6,7 +6,8 @@ use \App\Models\User;
 
 $userController = new UserController();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
     $userEmail = $_POST['email'];
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -19,9 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = $userController->createUser($user);
 
     $registrationFailed = false;
-    if ($userId) {
+    if ($userId)
+    {
         header('Location: login.php');
-    } else {
+    } else
+    {
         $registrationFailed = true;
     }
 }

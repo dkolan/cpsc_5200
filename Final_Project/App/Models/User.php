@@ -11,7 +11,8 @@ class User implements Serializable {
     private $password;
     private $date_created;
 
-    public function serialize() {
+    public function serialize()
+    {
         $encode = json_encode(array(
             'id' => $this->id,
             'email' => $this->email,
@@ -23,7 +24,8 @@ class User implements Serializable {
         return $encode;
     }
     
-    public function unserialize($data) {
+    public function unserialize($data)
+    {
         $values = json_decode($data, true);
         $this->id = $values['id'];
         $this->email = $values['email'];
@@ -35,49 +37,61 @@ class User implements Serializable {
     }
     
     
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
     
-    public function getEmail() {
+    public function getEmail()
+    {
         return $this->email;
     }
     
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->username;
     }
     
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->password;
     }
     
-    public function getDateCreated() {
+    public function getDateCreated()
+    {
         return $this->date_created;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
     
-    public function setEmail($email) {
+    public function setEmail($email)
+    {
         $this->email = $email;
     }
     
-    public function setUsername($username) {
+    public function setUsername($username)
+    {
         $this->username = $username;
     }
     
-    public function setPassword($password) {
+    public function setPassword($password)
+    {
         $this->password = $password;
     }
     
-    public function setDateCreated($date_created) {
+    public function setDateCreated($date_created)
+    {
         $this->date_created = $date_created;
     }
 
-    public function createUser($email, $username, $password) {
+    public function createUser($email, $username, $password)
+    {
         $count = $this->userExists($email, $username);
-        if ($count > 0) {
+        if ($count > 0)
+        {
             return false;
         }
     
@@ -96,26 +110,30 @@ class User implements Serializable {
         $currentDate = date('Y-m-d H:i:s');
         $stmt->bind_param("ssss", $email, $username, $hashedPass, $currentDate);
     
-        if ($stmt->execute()) {
+        if ($stmt->execute())
+        {
             $userId = mysqli_stmt_insert_id($stmt);
             $stmt->close();
             $conn->close();
             return $userId;
-        } else {
+        } else
+        {
             $stmt->close();
             $conn->close();
             return -1;
         }
     }
     
-    public function getUserById($id) {
+    public function getUserById($id)
+    {
         $conn = createConnection();
     
         $sql = "SELECT id, email, username, date_created FROM st_users WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, 'i', $id);
     
-        if(mysqli_stmt_execute($stmt)) {
+        if(mysqli_stmt_execute($stmt))
+        {
             mysqli_stmt_bind_result($stmt, $userId, $userEmail, $userName, $userDateCreated);
             mysqli_stmt_fetch($stmt);
             mysqli_stmt_close($stmt);
@@ -128,16 +146,19 @@ class User implements Serializable {
             $retrievedUser->setDateCreated($userDateCreated);
     
             return $retrievedUser;
-        } else {
+        } else
+        {
             return false;
         }
     }
     
-    public function updateUser() {
+    public function updateUser()
+    {
 
     }
     
-    public function deleteUser() {
+    public function deleteUser()
+    {
     }
 
     function authUser($username, $password)
@@ -155,11 +176,13 @@ class User implements Serializable {
         $salt = substr($storedHash, 0, 29);
         $enteredHash = crypt($password, $salt);
 
-        if ($enteredHash === $storedHash) {
+        if ($enteredHash === $storedHash)
+        {
             $stmt->close();
             $conn->close();
             return intval($id);
-        } else {
+        } else
+        {
             $stmt->close();
             $conn->close();
             return -1;

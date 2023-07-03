@@ -2,9 +2,13 @@
 include 'App/Controllers/SetlistController.php';
 include 'App/Models/Setlist.php';
 include 'App/Models/User.php';
+include 'App/Controllers/SongController.php';
+include 'App/Models/Song.php';
 use \App\Controllers\SetlistController;
 use \App\Models\Setlist;
 use \App\Models\User;
+use App\Controllers\SongController;
+use \App\Models\Song;
 
 // If there is a cookie for current user, decode the JSON into a User object
 // to be used for actions in the application.
@@ -15,15 +19,30 @@ if (isset($_COOKIE['currentUser']))
 }
 $setlistController = new SetlistController();
 $setlists = $setlistController->getSetlists($currentUser->getId());
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
     // Get the setlist associated with the id
     $setlist = $setlistController->getSetlistById(intval($_POST['setlist_id']));
     
     // var_dump($setlist);
 
-    if ($setlist) {
+    // If the setlist is successfully retrieved
+    if ($setlist) 
+    {
+        // Get the songs in the setlist
+        $songsIdsInSetlist = $setlistController->getSongIdsInSetlist($setlist_id);
+        // var_dump($songsIdsInSetlist);
 
-    } else {
+        // If the song IDs in the setlist have been successfully retrieved...
+        if($songsIdsInSetlist)
+        {
+            // Get all the song objects that belond in the setlist
+            $songController = new SongController();
+            $songsInSetlist = $songController->getSongsBySongIds($songsIdsInSetlist);
+            // var_dump($songsInSetlist);
+        }
+    } else 
+    {
     }
 }
 ?>
@@ -51,27 +70,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </form>
     
-    <!-- <div class="setlist">
-        <div class="setlist-row setlist-header">
-            <div class="setlist-field">Name</div>
-            <div class="setlist-field">Location</div>
-            <div class="setlist-field">Date</div>
-            <div class="setlist-field">Event Type</div>
-            <i id="hidden" class="chevron-right fas fa-chevron-right"></i>  
-    </div>
-        <?php
-            foreach ($setlists as $setlist)
+    <div class="setlists">
+        <div class="setlist">
+            <div class="setlist-row setlist-header">
+                <div class="setlist-field">Title</div>
+                <div class="setlist-field">Artist</div>
+                <div class="setlist-field">Key</div>
+                <div class="setlist-field">Tempo</div>
+                <i id="hidden" class="chevron-right fas fa-chevron-right"></i> 
+            </div>
+
+            <?php 
+            if (isset($songsInSetlist))
             {
-        ?>      <a class="setlist-row">
-                    <div class="setlist-field"><?= $setlist->getName() ?></div>
-                    <div class="setlist-field"><?= $setlist->getCity() . ", " . $setlist->getState() ?></div>
-                    <div class="setlist-field"><?= $setlist->getDate() ?></div>
-                    <div class="setlist-field"><?= $setlist->getType() ?></div>
-                    <i class="chevron-right fas fa-chevron-right"></i>
-                </a>
-        <?php
-            }
-        ?>
-    </div> -->
+            foreach($songsInSetlist as $song) { 
+                
+            ?>
+                <details class="setlist-row">
+                    <summary>
+                        <div class="setlist-fields">
+                            <div class="setlist-field"><?= $song->getSongTitle() ?></div>
+                            <div class="setlist-field"><?= $song->getArtist() ?></div>
+                            <div class="setlist-field"><?= $song->getSongKey() . " " . (($song->getMode() == 0) ? "Major" : "Minor") ?></div>
+                            <div class="setlist-field"><?= $song->getTempo() ?></div>
+                            <i class="chevron-right fas fa-chevron-right"></i>
+                        </div>
+                    </summary>
+                    <div class="song-detail-field-container">
+                        <div class="song-detail-field-title">
+                            Link:
+                        </div>
+                        <div class="song-detail-field-content">
+                            <a href="<?= $song->getLink() ?>"><?= $song->getLink() ?></a>
+                        </div>
+                    </div>
+                    <div class="song-detail-field-container">
+                        <div class="song-detail-field-title">
+                            Notes:
+                        </div>
+                        <div class="break"></div>
+                        <div class="song-detail-field-content">
+                            <p><?= $song->getNotes() ?></p>
+                        </div>
+                    </div>
+                </details>
+            <?php }} ?>
+        </div>
+    </div>
 </body>
 </html>

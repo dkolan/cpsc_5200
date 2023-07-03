@@ -5,7 +5,8 @@ ini_set('display_errors', 1);
 
 require_once 'includes/sql_lib.php';
 
-class Song {
+class Song
+{
     private $id;
     private $userId;
     private $songTitle;
@@ -17,100 +18,127 @@ class Song {
     private $link; // Nullable
     private $notes; // Nullable
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function getUserId() {
+    public function getUserId()
+    {
         return $this->userId;
     }
 
-    public function setUserId($userId) {
+    public function setUserId($userId)
+    {
         $this->userId = $userId;
     }
 
-    public function getSongTitle() {
+    public function getSongTitle()
+    {
         return $this->songTitle;
     }
 
-    public function setSongTitle($songTitle) {
+    public function setSongTitle($songTitle)
+    {
         $this->songTitle = $songTitle;
     }
 
-    public function getArtist() {
+    public function getArtist()
+    {
         return $this->artists;
     }
 
-    public function setArtist($artists) {
+    public function setArtist($artists)
+    {
         $this->artists = $artists;
     }
 
-    public function getTempo() {
+    public function getTempo()
+    {
         return $this->tempo;
     }
 
     // Allow for empty tempo field in new-song.php
-    public function setTempo($tempo) {
-        if (is_numeric($tempo)) {
+    public function setTempo($tempo)
+    {
+        if (is_numeric($tempo))
+        {
             $this->tempo = $tempo;
-        } else {
+        } else
+        {
             $this->tempo = null;
         }
     }
 
-    public function getSongKey() {
+    public function getSongKey()
+    {
         return $this->songKey;
     }
 
-    public function setSongKey($songKey) {
+    public function setSongKey($songKey)
+    {
         $this->songKey = $songKey;
     }
 
-    public function getMode() {
+    public function getMode()
+    {
         return $this->mode;
     }
 
-    public function setMode($mode) {
+    public function setMode($mode)
+    {
         $this->mode = $mode;
     }
 
-    public function getOriginalKey() {
+    public function getOriginalKey()
+    {
         return $this->originalKey;
     }
 
-    public function setOriginalKey($originalKey) {
+    public function setOriginalKey($originalKey)
+    {
         $this->originalKey = $originalKey;
     }
 
-    public function getLink() {
+    public function getLink()
+    {
         return $this->link;
     }
 
-    public function setLink($link) {
-        if (!empty($link)) {
+    public function setLink($link)
+    {
+        if (!empty($link))
+        {
             $this->link = $link;
-        } else {
+        } else
+        {
             $this->link = null;
         }
     }
 
-    public function getNotes() {
+    public function getNotes()
+    {
         return $this->notes;
     }
 
-    public function setNotes($notes) {
-        if (!empty($notes)) {
+    public function setNotes($notes)
+    {
+        if (!empty($notes))
+        {
             $this->notes = $notes;
-        } else {
+        } else
+        {
             $this->notes = null;
         }
     }
 
-    function createSong($user_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes) {
+    function createSong($user_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes)
+    {
         $conn = createConnection();
 
         $sql = "INSERT INTO st_songs (user_id, song_title, artist, tempo, song_key, mode, original_key, link, notes) 
@@ -118,12 +146,14 @@ class Song {
         $stmt = mysqli_prepare($conn, $sql);
 
         mysqli_stmt_bind_param($stmt, 'issisiiss', $user_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes);
-        if (mysqli_stmt_execute($stmt)) {
+        if (mysqli_stmt_execute($stmt))
+        {
             $songId = mysqli_stmt_insert_id($stmt);
             mysqli_stmt_close($stmt);
             $conn->close();
             return $songId;
-        } else {
+        } else
+        {
             // die('Query error: ' . mysqli_error($conn)); // Debug statement
             return false;
         }
@@ -164,9 +194,49 @@ class Song {
 
 			return $songs;
 
-        } else {
+        } else
+        {
             // die('Query error: ' . mysqli_error($conn)); // Debug statement
             return false;
         }
+    }
+
+    function getSongsBySongIds($songsIdsInSetlist) 
+	{
+        $songs = array();
+        $conn = createConnection();
+
+        $sql = "SELECT id, song_title, artist, tempo, song_key, mode, original_key, link, notes from st_songs WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        // I know this is bad, but I got stuck on WHERE id IN $songsIdsInSetlist
+        foreach($songsIdsInSetlist as $songId)
+        {
+            mysqli_stmt_bind_param($stmt, 'i', $songId);
+    
+            if (mysqli_stmt_execute($stmt)) 
+            {
+                mysqli_stmt_bind_result($stmt, $song_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes);
+                mysqli_stmt_fetch($stmt);
+
+                $song = new Song();
+                $song->setId($song_id);
+                $song->setSongTitle($song_title);
+                $song->setArtist($artist);
+                $song->setTempo($tempo);
+                $song->setSongKey($song_key);
+                $song->setMode($mode);
+                $song->setOriginalKey($original_key);
+                $song->setLink($link);
+                $song->setNotes($notes);
+
+                $songs[] = $song;
+            }
+         
+        }
+
+        mysqli_stmt_close($stmt);
+        $conn->close();
+
+        return $songs;
     }
 }

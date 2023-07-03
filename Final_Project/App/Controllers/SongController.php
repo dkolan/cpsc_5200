@@ -60,4 +60,22 @@ class SongController
             return false;
         }
     }
+
+    public function getSongsBySongIds($songsIdsInSetlist)
+    {
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $song = new Song();
+            $songs = array();
+
+            // $currentUser = new User();
+            // $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
+
+            $songs = $song->getSongsBySongIds($songsIdsInSetlist);
+
+            return $songs;
+        } else {
+            return false;
+        }
+    }
 }

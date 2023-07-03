@@ -166,4 +166,66 @@ class Setlist {
             return false;
         }
     }
+
+	// Probably should have its own model 
+	function addSongToSetlist($setlist_id, $song_id) 
+	{
+        $conn = createConnection();
+
+		// Prevent duplicates from being added
+		$sql = "SELECT COUNT(*) FROM st_setlist_songs WHERE setlist_id = ? AND song_id = ?";
+		$stmt = mysqli_prepare($conn, $sql);
+		mysqli_stmt_bind_param($stmt, 'ii', $setlist_id, $song_id);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $count);
+		mysqli_stmt_fetch($stmt);
+		mysqli_stmt_close($stmt);
+		
+		if ($count > 0) {
+			// The song already exists in the setlist, return false or handle the duplication error
+			$conn->close();
+			return false;
+		} else {
+			$sql = "INSERT INTO st_setlist_songs (setlist_id, song_id) VALUES (?, ?)";
+			$stmt = mysqli_prepare($conn, $sql);
+			mysqli_stmt_bind_param($stmt, 'ii', $setlist_id, $song_id);
+
+			if (mysqli_stmt_execute($stmt)) 
+			{
+				$setlist_song_id = mysqli_stmt_insert_id($stmt);
+				mysqli_stmt_close($stmt);
+				$conn->close();
+				return $setlist_song_id;
+
+			} else {
+				// die('Query error: ' . mysqli_error($conn)); // Debug statement
+				return false;
+			}
+		}
+    }
+
+	function getSongIdsInSetlist($setlist_id) 
+	{
+        $conn = createConnection();
+
+        $sql = "SELECT id, song_id FROM st_setlist_songs WHERE setlist_id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $setlist_id);
+
+        if (mysqli_stmt_execute($stmt)) 
+		{
+			mysqli_stmt_bind_result($stmt, $setlist_song_id, $song_id);
+			
+			$setlistSongIds = array();
+			while(mysqli_stmt_fetch($stmt))
+			{
+				$setlistSongIds[] = $song_id;
+			}
+
+			return $setlistSongIds;
+        } else {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
 }

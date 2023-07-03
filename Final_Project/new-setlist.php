@@ -30,7 +30,8 @@ if (!isset($_COOKIE['currentUser']))
 // make a Setlist obj, set the fields, send upstream to DB
 $setlistController = new SetlistController();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
     $name = $_POST['setlist-name'];
     $city = $_POST['setlist-city'];
     $state = $_POST['setlist-state'];
@@ -50,9 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // If the song is created, 
     $setlistCreated = false;
-    if ($setlistId) {
+    if ($setlistId)
+    {
         $setlistCreated = true;
-    } else {
+    } else
+    {
     }
 }
 ?>
