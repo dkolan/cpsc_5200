@@ -38,9 +38,21 @@ class SongController
         // TODO
     }
 
-    public function delete($id)
+    public function deleteSong($song_id)
     {
-        // TODO
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $song = new Song();
+
+            // $currentUser = new User();
+            // $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
+
+            $deleted = $song->deleteSong($song_id);
+
+            return $deleted;
+        } else {
+            return false;
+        }
     }
 
     public function getSongsById($user_id)

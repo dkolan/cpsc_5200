@@ -11,35 +11,31 @@ use App\Controllers\SongController;
 
 // If there is a cookie for current user, decode the JSON into a User object
 // to be used for actions in the application.
-if (isset($_COOKIE['currentUser']))
-{
+if (isset($_COOKIE['currentUser'])) {
     $currentUser = new User();
     $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
 }
 $songController = new SongController();
 $songs = $songController->getSongsById($currentUser->getId());
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST')
-{
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // If POST contains both at least a song_id and setlist_id, we'll associate songs with a setlist
-    if (isset($_POST['song_id']) && isset($_POST['setlist_id']))
-    {
-        // $songIds = array_values($_POST['song_id']);
-        // var_dump($songIds);
-
+    if (isset($_POST['song_id']) && isset($_POST['setlist_id'])) {
         $setlistController = new SetlistController();
         $setlist_song_ids = $setlistController->addSongToSetlist($_POST['setlist_id'], $_POST['song_id']);
-        // var_dump($setlist_song_ids);
 
-    } else
-    {
+    } elseif (isset($_POST['song_id'])) {
+        $songIdToDelete = $_POST['song_id'];
+        $songController = new SongController();
+        if ($songController->deleteSong($songIdToDelete)) {
+            header("Location: ".$_SERVER['PHP_SELF']);
+        }
     }
     // If we have a setlist ID, we will add songs to the setlist
     if (isset($_POST['setlist_id'])) {
         $setlistController = new SetlistController();
         $setlist = $setlistController->getSetlistById(intval($_POST['setlist_id']));
-    } else
-    {
+    } else {
     }
 }
 ?>
@@ -56,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 
 <body>
     <?php include 'nav-bar.html'; ?>
-    <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Songs</h2>
+    <h2 class="centered-text form-title">
+        <?= $currentUser->getUsername() ?>'s Songs
+    </h2>
     <h3 class="centered-text form-title">
         <?= isset($_POST['setlist_id']) ? $setlist->getName() . " (" . date('F d, Y', strtotime($setlist->getDate())) . ")" : "" ?>
     </h3>
@@ -73,30 +71,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
                 <th class="songs-table-header">Key</th>
                 <th class="songs-table-header songs-table-centered">Original Key</th>
                 <th class="songs-table-header songs-table-centered">Select</th>
+                <th class="songs-table-header songs-table-centered"></th>
             </tr>
             <?php
-            foreach ($songs as $song)
-            {
-            ?>
-            <tr class="songs-table-row">
-                <td class="songs-table-field"><?= $song->getSongTitle() ?></td>
-                <td class="songs-table-field"><?= $song->getArtist() ?></td>
-                <td class="songs-table-field"><?= $song->getTempo() ?></td>
-                <td class="songs-table-field"><?= $song->getSongKey() . " " . (($song->getMode() == 0) ? "Major" : "Minor") ?></td>
-                <td class="songs-table-field songs-table-centered"><?= ($song->getOriginalKey() == 1) ? "X" : "" ?></td>
-                <td class="songs-table-header songs-table-centered">
-                    <input type="checkbox" id="song-id" name="song_id[]" value="<?= $song->getId() ?>">
-                </td>
-            </tr>
-            <?php
+            foreach ($songs as $song) {
+                ?>
+                <tr class="songs-table-row">
+                    <td class="songs-table-field">
+                        <?= $song->getSongTitle() ?>
+                    </td>
+                    <td class="songs-table-field">
+                        <?= $song->getArtist() ?>
+                    </td>
+                    <td class="songs-table-field">
+                        <?= $song->getTempo() ?>
+                    </td>
+                    <td class="songs-table-field">
+                        <?= $song->getSongKey() . " " . (($song->getMode() == 0) ? "Major" : "Minor") ?>
+                    </td>
+                    <td class="songs-table-field songs-table-centered">
+                        <?= ($song->getOriginalKey() == 1) ? "X" : "" ?>
+                    </td>
+                    <td class="songs-table-header songs-table-centered">
+                        <input type="checkbox" id="song-id" name="song_id[]" value="<?= $song->getId() ?>">
+                    </td>
+                    <td class="songs-table-field">
+                        <div class="song-edit-btn-container">
+                            <div class="song-edit-btn">
+                                <form action="new-song.php" method="post">
+                                <input type="hidden" name="song_id" value="<?= $song->getId() ?>">
+                                <button class="song-action-button" type="submit">Edit</button>
+                                </form>
+                            </div>
+                            <div class="song-edit-btn">
+                                <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
+                                <input type="hidden" name="song_id" value="<?= $song->getId() ?>">
+                                <button class="song-action-button" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <?php
             }
             ?>
         </table>
         <!-- No idea if this is a reasonable way to track the current setlist to add to... -->
         <input type="hidden" name="setlist_id" value="<?= isset($_POST['setlist_id']) ? $_POST['setlist_id'] : '' ?>">
         <div class="add-songs-button">
-            <button type="submit">Add Songs to Setlist</button>
+            <button class="add-song-submit-btn" type="submit">Add Songs to Setlist</button>
         </div>
     </form>
 </body>
+
 </html>

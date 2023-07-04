@@ -89,8 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
                 <details class="setlist-row">
                     <summary>
                         <div class="setlist-fields">
-                            <div class="setlist-field"><?= $song->getSongTitle() ?></div>
-                            <div class="setlist-field"><?= $song->getArtist() ?></div>
+                            <div class="setlist-field"><?= stripslashes($song->getSongTitle()) ?></div>
+                            <div class="setlist-field"><?= stripslashes($song->getArtist()) ?></div>
                             <div class="setlist-field"><?= $song->getSongKey() . " " . (($song->getMode() == 0) ? "Major" : "Minor") ?></div>
                             <div class="setlist-field"><?= $song->getTempo() ?></div>
                             <i class="chevron-right fas fa-chevron-right"></i>
@@ -108,9 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
                         <div class="song-detail-field-title">
                             Notes:
                         </div>
-                        <div class="break"></div>
+                        <!-- <div class="break"></div> -->
                         <div class="song-detail-field-content">
-                            <p><?= $song->getNotes() ?></p>
+                            <p><?= stripslashes($song->getNotes()) ?></p>
                         </div>
                     </div>
                 </details>

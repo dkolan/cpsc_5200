@@ -159,6 +159,26 @@ class Song
         }
     }
 
+    function deleteSong($song_id)
+    {
+        $conn = createConnection();
+    
+        $sql = "DELETE FROM st_songs WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+    
+        mysqli_stmt_bind_param($stmt, 'i', $song_id);
+        if (mysqli_stmt_execute($stmt))
+        {
+            mysqli_stmt_close($stmt);
+            $conn->close();
+            return true;
+        } else
+        {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
+
     function getSongsByUserId($user_id) 
 	{
         $conn = createConnection();
