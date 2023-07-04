@@ -16,7 +16,7 @@ if (isset($_COOKIE['currentUser'])) {
     $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
 }
 $songController = new SongController();
-$songs = $songController->getSongsById($currentUser->getId());
+$songs = $songController->getSongsByUserId($currentUser->getId());
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // If POST contains both at least a song_id and setlist_id, we'll associate songs with a setlist
@@ -98,15 +98,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td class="songs-table-field">
                         <div class="song-edit-btn-container">
                             <div class="song-edit-btn">
-                                <form action="new-song.php" method="post">
-                                <input type="hidden" name="song_id" value="<?= $song->getId() ?>">
-                                <button class="song-action-button" type="submit">Edit</button>
-                                </form>
+                                <!-- <form action="new-song.php" method="post"> -->
+                                <a href="new-song.php?song_id=<?= $song->getId() ?>">
+                                    <!-- <input type="hidden" name="song_id" value="<?= $song->getId() ?>"> -->
+                                    <button class="song-action-button" type="button">Edit</button>
+                                </a>
+                                <!-- </form> -->
                             </div>
                             <div class="song-edit-btn">
                                 <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
-                                <input type="hidden" name="song_id" value="<?= $song->getId() ?>">
-                                <button class="song-action-button" type="submit">Delete</button>
+                                    <input type="hidden" name="song_id" value="<?= $song->getId() ?>">
+                                    <button class="song-action-button" type="submit">Delete</button>
                                 </form>
                             </div>
                         </div>

@@ -159,6 +159,26 @@ class Song
         }
     }
 
+    function updateSong($song_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes)
+    {
+        $conn = createConnection();
+    
+        $sql = "UPDATE st_songs 
+                SET song_title = ?, artist = ?, tempo = ?, song_key = ?, mode = ?, original_key = ?, link = ?, notes = ?
+                WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+    
+        mysqli_stmt_bind_param($stmt, 'ssisiissi', $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes, $song_id);
+        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
+            $conn->close();
+            return true;
+        } else {
+            die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
+
     function deleteSong($song_id)
     {
         $conn = createConnection();
@@ -258,5 +278,40 @@ class Song
         $conn->close();
 
         return $songs;
+    }
+
+    function getSongById($song_id) 
+	{
+        $conn = createConnection();
+
+        $sql = "SELECT id, song_title, artist, tempo, song_key, mode, original_key, link, notes from st_songs WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $song_id);
+
+        if (mysqli_stmt_execute($stmt)) 
+		{
+            mysqli_stmt_bind_result($stmt, $song_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes);
+
+            mysqli_stmt_fetch($stmt);
+            $song = new Song();
+            $song->setId($song_id);
+            $song->setSongTitle($song_title);
+            $song->setArtist($artist);
+            $song->setTempo($tempo);
+            $song->setSongKey($song_key);
+            $song->setMode($mode);
+            $song->setOriginalKey($original_key);
+            $song->setLink($link);
+            $song->setNotes($notes);
+    
+            mysqli_stmt_close($stmt);
+            $conn->close();
+
+            return $song;
+        } else
+        {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
     }
 }
