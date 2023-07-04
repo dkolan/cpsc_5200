@@ -63,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     <h3 class="centered-text form-title"><?= date('F d, Y', strtotime($setlist->getDate())) ?></h3>
 
     <form class="songs" action="songs.php" method="post">
-        <div class="add-songs-button">
-            <button type="submit" name="setlist_id" value="<?= $setlist->getId() ?>">
+        <div class="add-songs-btn-container">
+            <button class="add-songs-to-setlist-btn" type="submit" name="setlist_id" value="<?= $setlist->getId() ?>">
                 Add Songs to Setlist
             </button>
         </div>
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
                         </div>
                         <!-- <div class="break"></div> -->
                         <div class="song-detail-field-content">
-                            <p><?= stripslashes($song->getNotes()) ?></p>
+                            <?= stripslashes($song->getNotes()) ?>
                         </div>
                     </div>
                 </details>

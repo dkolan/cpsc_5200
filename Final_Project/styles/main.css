@@ -251,6 +251,28 @@ button.setlist-row:hover {
     margin-left: auto;
 }
 
+.add-songs-btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.add-songs-to-setlist-btn {
+    width: 25%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #0C8E41;
+    font-size: 1.5rem;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    transition: 0.2s ease-in-out;
+}
+
+.add-songs-to-setlist-btn:hover {
+    background-color: #0d7b39;
+}
+
 #hidden {
     visibility: hidden;
 }

@@ -174,7 +174,7 @@ class Song
             $conn->close();
             return true;
         } else {
-            die('Query error: ' . mysqli_error($conn)); // Debug statement
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
             return false;
         }
     }
