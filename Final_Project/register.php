@@ -6,8 +6,7 @@ use \App\Models\User;
 
 $userController = new UserController();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST')
-{
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userEmail = $_POST['email'];
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -20,11 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     $userId = $userController->createUser($user);
 
     $registrationFailed = false;
-    if ($userId)
-    {
+    if ($userId) {
         header('Location: login.php');
-    } else
-    {
+    } else {
         $registrationFailed = true;
     }
 }
@@ -45,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         <h2>Setlist Tracker</h2>
         <h3>Register New User</h3>
         <span class="user-created-msg">
-                <?= $registrationFailed ? "Registration Unsuccessful." : "" ?>
-            </span>
+            <?= $registrationFailed ? "Registration Unsuccessful." : "" ?>
+        </span>
         <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
             <input name="email" class="text-input" type="email" placeholder="Email" required="true">
             <input name="username" class="text-input" type="text" placeholder="Username" required="true">

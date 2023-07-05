@@ -4,8 +4,10 @@ namespace App\Controllers;
 use App\Models\User;
 use App\Models\Setlist;
 
+// Class representing a setlist
 class SetlistController
 {   
+    // Creates a setlist record in the DB given a seltlist object
     public function create(Setlist $setlist)
     {
         // Basic check for set cookie -- probably need to verify with DB
@@ -28,21 +30,59 @@ class SetlistController
         }
     }
 
-    public function update($id)
+    // Edits a setlist given a setlist object with fields to use to edit with
+    public function editSetlist(Setlist $setlist)
     {
-        // TODO
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $currentUser = new User();
+            $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
+            $setlistUpdated = $setlist->updateSetlist(
+                $setlist->getId(),
+                $setlist->getName(),
+                $setlist->getCity(),
+                $setlist->getState(),
+                $setlist->getDate(),
+                $setlist->getType()
+            );
+            return $setlistUpdated;
+        } else {
+            return false;
+        }
     }
 
-    public function delete($id)
+    // Deletes a setlist given its ID
+    public function deleteSetlist($setlist_id)
     {
-        // TODO
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $currentUser = new User();
+            $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
+            $setlist = new Setlist();
+            $setlistDeleted = $setlist->deleteSetlist($setlist_id);
+
+            return $setlistDeleted;
+        } else {
+            return false;
+        }
     }
 
-    public function read($id)
+    // Deletes a song from the relationship with a particular setlist given the song_id and setlist_id
+    public function deleteSongFromSetlist($song_id, $setlist_id)
     {
-        // TODO
+        if (isset($_COOKIE['currentUser']))
+        { 
+            $currentUser = new User();
+            $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
+            $setlist = new Setlist();
+            $songDeletedFromSetlist = $setlist->deleteSongFromSetlist($song_id, $setlist_id);
+            return $songDeletedFromSetlist;
+        } else {
+            return false;
+        }
     }
 
+    // Gets setlsits based on a users ID
     public function getSetlists($userId)
     {
         if (isset($_COOKIE['currentUser']))
@@ -59,6 +99,7 @@ class SetlistController
 
     }
 
+    // Gets a setlist given its setlist_id
     public function getSetlistById($setlist_id)
     {
         if (isset($_COOKIE['currentUser']))
@@ -74,7 +115,8 @@ class SetlistController
 
     }
 
-    public function addSongToSetlist($setlist_id, $song_ids_arr)
+    // Adds a song to a letlist using it's foreign key relation
+    public function addSongToSetlist($setlist_id, $song_id)
     {
         // Basic check for set cookie -- probably need to verify with DB
         // Checking to prevent potential malicious writes to DB
@@ -83,16 +125,14 @@ class SetlistController
             $setlist = new Setlist();
             $setlist->setId($setlist_id);
             $setlist_song_ids = array();
-            foreach ($song_ids_arr as $song_id)
-            {
-                $setlist_song_ids[] = $setlist->addSongToSetlist($setlist_id, $song_id);
-            }
-            return $setlist_song_ids;
+            $setlist_song_id = $setlist->addSongToSetlist($setlist_id, $song_id);
+            return $setlist_song_id;
         } else {
             return false;
         }
     }
 
+    // Gets all songs in a setlist given its id.
     public function getSongIdsInSetlist($setlist_id)
     {
         // Basic check for set cookie -- probably need to verify with DB

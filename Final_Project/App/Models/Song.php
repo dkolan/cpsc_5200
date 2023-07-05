@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 
 require_once 'includes/sql_lib.php';
 
+// Class representing a song object
 class Song
 {
     private $id;
@@ -18,6 +19,7 @@ class Song
     private $link; // Nullable
     private $notes; // Nullable
 
+    // Accessor and mutator methods
     public function getId()
     {
         return $this->id;
@@ -137,6 +139,7 @@ class Song
         }
     }
 
+    // Takes in the fields for a song and creates a song record in the database
     function createSong($user_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes)
     {
         $conn = createConnection();
@@ -159,6 +162,7 @@ class Song
         }
     }
 
+    // Takes in the fields for a song and updates a song record in the database given the ID of the song
     function updateSong($song_id, $song_title, $artist, $tempo, $song_key, $mode, $original_key, $link, $notes)
     {
         $conn = createConnection();
@@ -199,6 +203,7 @@ class Song
         }
     }
 
+    // Retrieves all songs assocaited with a user ID in the database
     function getSongsByUserId($user_id) 
 	{
         $conn = createConnection();
@@ -241,6 +246,7 @@ class Song
         }
     }
 
+    // Retrieves all the songs given as list of their IDs. I had difficulty figuring out the WHERE IN statement.
     function getSongsBySongIds($songsIdsInSetlist) 
 	{
         $songs = array();
@@ -280,6 +286,7 @@ class Song
         return $songs;
     }
 
+    // Retreives a single song given it's ID.
     function getSongById($song_id) 
 	{
         $conn = createConnection();

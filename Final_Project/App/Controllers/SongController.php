@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Models\User;
 use App\Models\Song;
 
+// Controller class for Songs
 class SongController
 {   
     public function create(Song $song)
@@ -33,11 +34,9 @@ class SongController
 
     }
 
+    // Edits a song
     public function editSong(Song $song)
     {
-        // Basic check for set cookie -- probably need to verify with DB
-        // Checking to prevent potential malicious writes to DB
-        // Not working because the cookie stays set why can't we use SESSION?
         if (isset($_COOKIE['currentUser']))
         { 
             $currentUser = new User();
@@ -57,22 +56,14 @@ class SongController
         } else {
             return false;
         }
-
     }
 
-    public function update($id)
-    {
-        // TODO
-    }
-
+    // Deletes a song given its id
     public function deleteSong($song_id)
     {
         if (isset($_COOKIE['currentUser']))
         { 
             $song = new Song();
-
-            // $currentUser = new User();
-            // $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
 
             $deleted = $song->deleteSong($song_id);
 
@@ -82,15 +73,13 @@ class SongController
         }
     }
 
+    // Get all songs associated with a user ID
     public function getSongsByUserId($user_id)
     {
         if (isset($_COOKIE['currentUser']))
         { 
             $song = new Song();
             $songs = array();
-
-            // $currentUser = new User();
-            // $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
 
             $songs = $song->getSongsByUserId($user_id);
 
@@ -100,15 +89,13 @@ class SongController
         }
     }
 
+    // Gets the songs in a setlist given their IDs.
     public function getSongsBySongIds($songsIdsInSetlist)
     {
         if (isset($_COOKIE['currentUser']))
         { 
             $song = new Song();
             $songs = array();
-
-            // $currentUser = new User();
-            // $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
 
             $songs = $song->getSongsBySongIds($songsIdsInSetlist);
 
@@ -118,14 +105,12 @@ class SongController
         }
     }
 
+    // Gets a song given its ID.
     public function getSongById($song_id)
     {
         if (isset($_COOKIE['currentUser']))
         { 
             $song = new Song();
-
-            // $currentUser = new User();
-            // $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
 
             $song = $song->getSongById($song_id);
 

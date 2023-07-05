@@ -251,7 +251,8 @@ button.setlist-row:hover {
     margin-left: auto;
 }
 
-.add-songs-btn-container {
+.add-songs-btn-container,
+.setlist-edit-btn-container {
     display: flex;
     justify-content: center;
 }
@@ -330,13 +331,13 @@ button.setlist-row:hover {
     font-weight: bold;
 }
 
-  .song-edit-btn-container {
+.song-edit-btn-container {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-  }
-    
-  .song-edit-btn button {
+}
+
+.song-edit-btn button {
     width: auto;
     background-color: #0C8E41;
     font-size: 1rem;
@@ -344,8 +345,20 @@ button.setlist-row:hover {
     border: none;
     border-radius: 6px;
     transition: 0.2s ease-in-out;
-  }
-  
-  .song-edit-btn button:hover {
+}
+
+.setlist-edit-btn button {
+    width: auto;
+    background-color: #0C8E41;
+    margin: 10px;
+    font-size: 1rem;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    transition: 0.2s ease-in-out;
+}
+
+.song-edit-btn button:hover,
+.setlist-edit-btn button:hover {
     background-color: #0d7b39;
-  }
+}

@@ -8,11 +8,11 @@ use \App\Models\User;
 
 // If there is a cookie for current user, decode the JSON into a User object
 // to be used for actions in the application.
-if (isset($_COOKIE['currentUser']))
-{
+if (isset($_COOKIE['currentUser'])) {
     $currentUser = new User();
     $currentUser->unserialize((stripslashes($_COOKIE['currentUser'])));
 }
+// Get the setlists...
 $setlistController = new SetlistController();
 $setlists = $setlistController->getSetlists($currentUser->getId());
 ?>
@@ -29,32 +29,43 @@ $setlists = $setlistController->getSetlists($currentUser->getId());
 
 <body>
     <?php include 'nav-bar.html'; ?>
-    <h2 class="centered-text form-title"><?= $currentUser->getUsername() ?>'s Setlists</h2>
-    
-    <form class="setlists" action="setlist-detail.php" method="post">
+    <h2 class="centered-text form-title">
+        <?= $currentUser->getUsername() ?>'s Setlists
+    </h2>
+
+    <form class="setlists" action="setlist-detail.php" method="get">
         <div class="setlist">
             <div class="setlist-row setlist-header">
                 <div class="setlist-field">Name</div>
                 <div class="setlist-field">Location</div>
                 <div class="setlist-field">Date</div>
                 <div class="setlist-field">Event Type</div>
-                <i id="hidden" class="chevron-right fas fa-chevron-right"></i>  
+                <i id="hidden" class="chevron-right fas fa-chevron-right"></i>
             </div>
             <?php
-                foreach ($setlists as $setlist)
-                {
-            ?>      
+            // Iterate through the users setlists and display them
+            foreach ($setlists as $setlist) {
+                ?>
                 <button type="submit" class="setlist-row" name="setlist_id" value="<?= $setlist->getId() ?>">
-                    <div class="setlist-field"><?= $setlist->getName() ?></div>
-                    <div class="setlist-field"><?= $setlist->getCity() . ", " . $setlist->getState() ?></div>
-                    <div class="setlist-field"><?= $setlist->getDate() ?></div>
-                    <div class="setlist-field"><?= $setlist->getType() ?></div>
+                    <div class="setlist-field">
+                        <?= $setlist->getName() ?>
+                    </div>
+                    <div class="setlist-field">
+                        <?= $setlist->getCity() . ", " . $setlist->getState() ?>
+                    </div>
+                    <div class="setlist-field">
+                        <?= $setlist->getDate() ?>
+                    </div>
+                    <div class="setlist-field">
+                        <?= $setlist->getType() ?>
+                    </div>
                     <i class="chevron-right fas fa-chevron-right"></i>
                 </button>
-            <?php
-                }
+                <?php
+            }
             ?>
         </div>
     </form>
 </body>
+
 </html>

@@ -1,10 +1,11 @@
 <?php
 namespace App\Models;
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 require_once 'includes/sql_lib.php';
 
+// A class representing a setlist object
 class Setlist {
     private $id;
     private $userId;
@@ -14,6 +15,7 @@ class Setlist {
     private $date;
     private $type;
 
+    // Accessor and mutator methods
 	public function getuserId() {
 		return $this->userId;
 	}
@@ -75,6 +77,7 @@ class Setlist {
 		return $this;
 	}
 
+    // Given the fields for a setlist, creates a setlist record in the database
     function createSetlist($user_id, $name, $city, $state, $setlist_date, $setlist_type) {
         $conn = createConnection();
 
@@ -95,6 +98,68 @@ class Setlist {
         }
     }
 
+    // Given a setlist ID and the fields within a setlist, updates the values to the ones provided
+	function updateSetlist($setlist_id, $name, $city, $state, $date, $type)
+    {
+        $conn = createConnection();
+    
+        $sql = "UPDATE st_setlists SET name = ?, city = ?, state = ?, setlist_date = ?, setlist_type = ? WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+    
+        mysqli_stmt_bind_param($stmt, 'sssssi', $name, $city, $state, $date, $type, $setlist_id);
+        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
+            $conn->close();
+            return true;
+        } else {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
+	
+    // Given a setlist ID and a song ID, attempts to delete the song from the setlist.
+	function deleteSongFromSetlist($song_id, $setlist_id)
+    {
+        $conn = createConnection();
+    
+        $sql = "DELETE FROM st_setlist_songs WHERE song_id = ? AND setlist_id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+    
+        mysqli_stmt_bind_param($stmt, 'ii', $song_id, $setlist_id);
+        if (mysqli_stmt_execute($stmt))
+        {
+            mysqli_stmt_close($stmt);
+            $conn->close();
+            return true;
+        } else
+        {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
+
+    // Given a song ID, deletes it from the setlist.
+	function deleteSong($song_id)
+    {
+        $conn = createConnection();
+    
+        $sql = "DELETE FROM st_songs WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+    
+        mysqli_stmt_bind_param($stmt, 'i', $song_id);
+        if (mysqli_stmt_execute($stmt))
+        {
+            mysqli_stmt_close($stmt);
+            $conn->close();
+            return true;
+        } else
+        {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
+
+    // Retrieve all of the setlists associated with a user.
     function getSetlists($user_id) 
 	{
         $conn = createConnection();
@@ -134,6 +199,7 @@ class Setlist {
         }
     }
 	
+    // Get a setlist given it's ID.
     function getSetlistById($setlist_id) 
 	{
         $conn = createConnection();
@@ -167,7 +233,9 @@ class Setlist {
         }
     }
 
-	// Probably should have its own model 
+	// Given a song ID and a setlist ID, associates a song with a setlist using its 
+    // Foreign key relation. Probably would've been better to do a model for each
+    // table in the DB.
 	function addSongToSetlist($setlist_id, $song_id) 
 	{
         $conn = createConnection();
@@ -204,6 +272,7 @@ class Setlist {
 		}
     }
 
+    // Given a setlist ID, returns all of the songs in the setlist.
 	function getSongIdsInSetlist($setlist_id) 
 	{
         $conn = createConnection();
@@ -224,6 +293,27 @@ class Setlist {
 
 			return $setlistSongIds;
         } else {
+            // die('Query error: ' . mysqli_error($conn)); // Debug statement
+            return false;
+        }
+    }
+
+    // Given a setlist ID, deletes the setlist.
+	function deleteSetlist($setlist_id)
+    {
+        $conn = createConnection();
+    
+        $sql = "DELETE FROM st_setlists WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+    
+        mysqli_stmt_bind_param($stmt, 'i', $setlist_id);
+        if (mysqli_stmt_execute($stmt))
+        {
+            mysqli_stmt_close($stmt);
+            $conn->close();
+            return true;
+        } else
+        {
             // die('Query error: ' . mysqli_error($conn)); // Debug statement
             return false;
         }

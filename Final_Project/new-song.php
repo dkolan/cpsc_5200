@@ -11,16 +11,13 @@ use \App\Models\Song;
 
 // Check for currentUser data to use for song creation
 // If cookie is not set, wipe all cookies, set as blank and redirect.
-if (!isset($_COOKIE['currentUser']))
-{
-    foreach ($_COOKIE as $key => $value)
-    {
+if (!isset($_COOKIE['currentUser'])) {
+    foreach ($_COOKIE as $key => $value) {
         unset($_COOKIE[$key]);
         setcookie($key, "", time() - 1, "/");
     }
     header('Location: login.php');
-} else
-{
+} else {
     $currentUser = new User();
     $currentUser->unserialize(stripslashes($_COOKIE['currentUser']));
 }
@@ -30,8 +27,7 @@ if (!isset($_COOKIE['currentUser']))
 // make a Song obj, set the fields, send upstream to DB
 $songController = new SongController();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST')
-{
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $songTitle = $_POST['song-title'];
     $artists = $_POST['artist'];
     $tempo = $_POST['tempo'];
@@ -51,33 +47,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     $song->setOriginalKey($originalKey);
     $song->setLink($link);
     $song->setNotes($notes);
-    if (strcasecmp($_POST['action'], 'add') == 0)
-    {
-        // var_dump($song);
+
+    // If the action is add, we'll create the song
+    if (strcasecmp($_POST['action'], 'add') == 0) {
         $songId = $songController->create($song);
-    
-        // If the song is created, 
+
+        // If the song is created oredited, set the success message
         $songCreated = false;
-        if ($songId)
-        {
+        if ($songId) {
             $songTitleArtistString = $song->getSongTitle() . " by " . $song->getArtist();
             $songCreated = true;
-        } else
-        {
+            header('Location: songs.php');
         }
-    } elseif (strcasecmp($_POST['action'], 'edit') == 0)
-    {
+    } elseif (strcasecmp($_POST['action'], 'edit') == 0) {
         $song->setId($_POST['song_id']);
-        $songUpdated = $songController->editSong($song);
+        if ($songController->editSong($song)) {
+            $songTitleArtistString = $song->getSongTitle() . " by " . $song->getArtist();
+            $songId = $song->getId();
+            $songEdited = true;
+        }
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET')
-{
-    if (isset($_GET['song_id']))
-    {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['song_id'])) {
         $song = $songController->getSongById($_GET['song_id']);
-        // die($song->getMode() == 12);
     }
 }
 ?>
@@ -94,84 +88,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
 <body>
     <?php include 'nav-bar.html'; ?>
 
-        <div class="form-container">
-            <h2 class="centered-text form-title"><?= isset($song) ? 'Edit Song' : 'Add Song' ?></h2>
-            <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
-                <div class="form-group full-width">
-                    <label for="song-title">Song Title</label>
-                    <input type="text" id="song-title" name="song-title" required="true" value="<?= isset($song) ? $song->getSongTitle() : '' ?>">
+    <div class="form-container">
+        <h2 class="centered-text form-title">
+            <?= isset($song) ? 'Edit Song' : 'Add Song' ?>
+        </h2>
+        <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
+            <div class="form-group full-width">
+                <label for="song-title">Song Title</label>
+                <input type="text" id="song-title" name="song-title" required="true"
+                    value="<?= isset($song) ? $song->getSongTitle() : '' ?>">
+            </div>
+
+            <div class="form-group full-width">
+                <label for="artist">Artist</label>
+                <input type="text" id="artist" name="artist" required="true"
+                    value="<?= isset($song) ? $song->getArtist() : '' ?>">
+
+            </div>
+
+            <div class="form-group-inline">
+                <div class="form-group quarter-width">
+                    <label for="tempo">Tempo</label>
+                    <input type="number" id="tempo" name="tempo" value="<?= isset($song) ? $song->getTempo() : '' ?>">
                 </div>
 
-                <div class="form-group full-width">
-                    <label for="artist">Artist</label>
-                    <!-- <input type="text" id="artist" name="artist" required="true"> -->
-                    <input type="text" id="artist" name="artist" required="true" value="<?= isset($song) ? $song->getArtist() : '' ?>">
-
+                <div class="form-group quarter-width">
+                    <label for="key">Key</label>
+                    <select id="key" name="key">
+                        <option value="C" <?= isset($song) && strcasecmp($song->getSongKey(), 'C') == 0 ? 'selected' : '' ?>>C</option>
+                        <option value="C#" <?= isset($song) && strcasecmp($song->getSongKey(), 'C#') == 0 ? 'selected' : '' ?>>C#/Db</option>
+                        <option value="D" <?= isset($song) && strcasecmp($song->getSongKey(), 'D') == 0 ? 'selected' : '' ?>>D</option>
+                        <option value="D#" <?= isset($song) && strcasecmp($song->getSongKey(), 'D#') == 0 ? 'selected' : '' ?>>D#/Eb</option>
+                        <option value="E" <?= isset($song) && strcasecmp($song->getSongKey(), 'E') == 0 ? 'selected' : '' ?>>E</option>
+                        <option value="F" <?= isset($song) && strcasecmp($song->getSongKey(), 'F') == 0 ? 'selected' : '' ?>>F</option>
+                        <option value="F#" <?= isset($song) && strcasecmp($song->getSongKey(), 'F#') == 0 ? 'selected' : '' ?>>F#/Gb</option>
+                        <option value="G" <?= isset($song) && strcasecmp($song->getSongKey(), 'G') == 0 ? 'selected' : '' ?>>G</option>
+                        <option value="G#" <?= isset($song) && strcasecmp($song->getSongKey(), 'G#') == 0 ? 'selected' : '' ?>>G#/Ab</option>
+                        <option value="A" <?= isset($song) && strcasecmp($song->getSongKey(), 'A') == 0 ? 'selected' : '' ?>>A</option>
+                        <option value="A#" <?= isset($song) && strcasecmp($song->getSongKey(), 'A#') == 0 ? 'selected' : '' ?>>A#/Bb</option>
+                        <option value="B" <?= isset($song) && strcasecmp($song->getSongKey(), 'B') == 0 ? 'selected' : '' ?>>B</option>
+                    </select>
                 </div>
 
-                <div class="form-group-inline">
-                    <div class="form-group quarter-width">
-                        <label for="tempo">Tempo</label>
-                        <!-- <input type="number" id="tempo" name="tempo"> -->
-                        <input type="number" id="tempo" name="tempo" value="<?= isset($song) ? $song->getTempo() : '' ?>">
-                    </div>
-
-                    <div class="form-group quarter-width">
-                        <label for="key">Key</label>
-                        <select id="key" name="key">
-                            <option value="C" <?= isset($song) && strcasecmp($song->getSongKey(), 'C') == 0 ? 'selected' : '' ?>>C</option>
-                            <option value="C#" <?= isset($song) && strcasecmp($song->getSongKey(), 'C#') == 0 ? 'selected' : '' ?>>C#/Db</option>
-                            <option value="D" <?= isset($song) && strcasecmp($song->getSongKey(), 'D') == 0 ? 'selected' : '' ?>>D</option>
-                            <option value="D#" <?= isset($song) && strcasecmp($song->getSongKey(), 'D#') == 0 ? 'selected' : '' ?>>D#/Eb</option>
-                            <option value="E" <?= isset($song) && strcasecmp($song->getSongKey(), 'E') == 0 ? 'selected' : '' ?>>E</option>
-                            <option value="F" <?= isset($song) && strcasecmp($song->getSongKey(), 'F') == 0 ? 'selected' : '' ?>>F</option>
-                            <option value="F#" <?= isset($song) && strcasecmp($song->getSongKey(), 'F#') == 0 ? 'selected' : '' ?>>F#/Gb</option>
-                            <option value="G" <?= isset($song) && strcasecmp($song->getSongKey(), 'G') == 0 ? 'selected' : '' ?>>G</option>
-                            <option value="G#" <?= isset($song) && strcasecmp($song->getSongKey(), 'G#') == 0 ? 'selected' : '' ?>>G#/Ab</option>
-                            <option value="A" <?= isset($song) && strcasecmp($song->getSongKey(), 'A') == 0 ? 'selected' : '' ?>>A</option>
-                            <option value="A#" <?= isset($song) && strcasecmp($song->getSongKey(), 'A#') == 0 ? 'selected' : '' ?>>A#/Bb</option>
-                            <option value="B" <?= isset($song) && strcasecmp($song->getSongKey(), 'B') == 0 ? 'selected' : '' ?>>B</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group quarter-width">
-                        <label for="mode">Mode</label>
-                        <select id="mode" name="mode">
-                            <option value="major" <?= isset($song) && $song->getMode() == 0 ? 'selected' : '' ?>>Major</option>
-                            <option value="minor" <?= isset($song) && $song->getMode() == 1 ? 'selected' : '' ?>>Minor</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group quarter-width">
-                        <label for="original-key">Original Key?</label>
-                        <input type="checkbox" id="original-key" name="original-key" checked=<?= isset($song) && $song->getOriginalKey() == 1 ? 'checked' : '' ?>>
-                    </div>
+                <div class="form-group quarter-width">
+                    <label for="mode">Mode</label>
+                    <select id="mode" name="mode">
+                        <option value="major" <?= isset($song) && $song->getMode() == 0 ? 'selected' : '' ?>>Major</option>
+                        <option value="minor" <?= isset($song) && $song->getMode() == 1 ? 'selected' : '' ?>>Minor</option>
+                    </select>
                 </div>
 
-                <div class="form-group full-width">
-                    <label for="link">Link</label>
-                    <!-- <input type="text" id="link" name="link"> -->
-                    <input type="text" id="link" name="link" value="<?= isset($song) ? $song->getLink() : '' ?>">
+                <div class="form-group quarter-width">
+                    <label for="original-key">Original Key?</label>
+                    <input type="checkbox" id="original-key" name="original-key" checked=<?= isset($song) && $song->getOriginalKey() == 1 ? 'checked' : '' ?>>
                 </div>
+            </div>
 
-                <div class="form-group full-width">
-                    <label for="notes">Notes</label>
-                    <textarea id="notes" name="notes" rows="10"><?= isset($song) ? $song->getNotes() : '' ?></textarea>
-                </div>
+            <div class="form-group full-width">
+                <label for="link">Link</label>
+                <input type="text" id="link" name="link" value="<?= isset($song) ? $song->getLink() : '' ?>">
+            </div>
 
-                <div class="form-group-inline centered-text">
-                    <?= isset($songId) ? $songCreated ? $songTitleArtistString . " added." : "Song not created." : "" ?>
-                </div>
+            <div class="form-group full-width">
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes" rows="10"><?= isset($song) ? $song->getNotes() : '' ?></textarea>
+            </div>
 
-                <div class="form-group full-width add-song-button">
-                    <!-- Not sure if this is the best way to determine if I'm adding or editing or tracking song id... -->
-                    <input type="hidden" name="action" value="<?= isset($song) ? 'edit' : 'add' ?>">
-                    <input type="hidden" name="song_id" value="<?= $song->getId() ?>">
-                    <button type="submit"><?= isset($song) ? 'Edit Song' : 'Add Song' ?></button>
-                </div>
-            </form>
-        </div>
+            <div class="form-group-inline centered-text">
+                <?php
+                if (isset($songId) && isset($songCreated)) {
+                    echo ($songCreated) ? stripslashes($songTitleArtistString) . " added." : "Song not created.";
+                } elseif (isset($songEdited)) {
+                    echo ($songEdited) ? stripslashes($songTitleArtistString) . " edited." : "Song not edited.";
+                }
+                ?>
+            </div>
 
+            <div class="form-group full-width add-song-button">
+                <!-- Not sure if this is the best way to determine if I'm adding or editing or tracking song id... -->
+                <input type="hidden" name="action" value="<?= isset($song) ? 'edit' : 'add' ?>">
+                <input type="hidden" name="song_id" value="<?= isset($song) ? $song->getId() : '' ?>">
+                <?= isset($song) ? '<button type="submit">Edit Song</button>' : '<button type="submit">Add Song</button>' ?>
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>
